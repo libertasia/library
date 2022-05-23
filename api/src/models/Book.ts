@@ -4,9 +4,10 @@ import mongoose, { Document } from 'mongoose'
 export type BookDocument = Document & {
   isbn: string
   title: string
+  category: string
   description: string
   publisher: string
-  authors: string[]
+  authors: mongoose.Types.ObjectId[]
   publishedDate: Date
   status: string
   borrowerId: mongoose.Types.ObjectId
@@ -19,9 +20,16 @@ const bookSchema = new mongoose.Schema({
     type: String,
     index: true,
     required: true,
+    unique: true,
   },
   title: {
     type: String,
+    index: true,
+    required: true,
+  },
+  category: {
+    type: String,
+    index: true,
     required: true,
   },
   description: {
@@ -33,7 +41,8 @@ const bookSchema = new mongoose.Schema({
     required: true,
   },
   authors: {
-    type: [String],
+    type: [mongoose.Types.ObjectId],
+    index: true,
     required: true,
   },
   publishedDate: {
@@ -42,6 +51,8 @@ const bookSchema = new mongoose.Schema({
   },
   status: {
     type: String,
+    enum: ['available', 'borrowed'],
+    index: true,
     required: true,
   },
   borrowerId: {
