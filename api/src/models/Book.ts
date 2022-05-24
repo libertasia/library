@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/member-delimiter-style */
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document, Schema } from 'mongoose'
 
 export type BookDocument = Document & {
   isbn: string
@@ -7,10 +7,10 @@ export type BookDocument = Document & {
   category: string
   description: string
   publisher: string
-  authors: mongoose.Types.ObjectId[]
-  publishedDate: Date
+  authors: string[]
+  publishedYear: number
   status: string
-  borrowerId: mongoose.Types.ObjectId
+  borrowerId: string
   borrowDate: Date
   returnDate: Date
 }
@@ -41,22 +41,25 @@ const bookSchema = new mongoose.Schema({
     required: true,
   },
   authors: {
-    type: [mongoose.Types.ObjectId],
+    type: [Schema.Types.ObjectId],
+    ref: 'Author',
     index: true,
     required: true,
   },
-  publishedDate: {
-    type: Date,
+  publishedYear: {
+    type: Number,
     required: true,
   },
   status: {
     type: String,
-    enum: ['available', 'borrowed'],
+    enum: ['AVAILABLE', 'BORROWED'],
+    default: 'AVAILABLE',
     index: true,
     required: true,
   },
   borrowerId: {
-    type: mongoose.Types.ObjectId,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
   borrowDate: {
     type: Date,

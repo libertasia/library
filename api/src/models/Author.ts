@@ -1,34 +1,51 @@
 /* eslint-disable @typescript-eslint/member-delimiter-style */
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document, Schema } from 'mongoose'
 
 export type AuthorDocument = Document & {
   firstName: string
   lastName: string
   birthYear: number
-  info: string
-  books: mongoose.Types.ObjectId[]
+  biography: string
+  books: string[]
 }
 
 const authorSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
+    maxLength: 100,
   },
   lastName: {
     type: String,
     required: true,
+    maxLength: 100,
   },
   birthYear: {
     type: Number,
     required: true,
   },
-  info: {
+  biography: {
     type: String,
     required: true,
   },
   books: {
-    type: [mongoose.Types.ObjectId],
+    type: [Schema.Types.ObjectId],
+    ref: 'Book',
   },
 })
+
+// Virtual for author's full name
+authorSchema
+  .virtual('name')
+  .get(function (this: { firstName: string; lastName: string }) {
+    let fullname = ''
+    if (this.firstName && this.lastName) {
+      fullname = this.firstName + ' ' + this.lastName
+    }
+    if (!this.firstName || !this.lastName) {
+      fullname = ''
+    }
+    return fullname
+  })
 
 export default mongoose.model<AuthorDocument>('Author', authorSchema)

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/member-delimiter-style */
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document, Schema } from 'mongoose'
 
 export type UserDocument = Document & {
   firstName: string
@@ -7,18 +7,20 @@ export type UserDocument = Document & {
   email: string
   userName: string
   password: string
-  borrowedBooks: mongoose.Types.ObjectId[]
-  isAdmin: boolean
+  borrowedBooks: string[]
+  role: string
 }
 
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
+    maxLength: 100,
   },
   lastName: {
     type: String,
     required: true,
+    maxLength: 100,
   },
   email: {
     type: String,
@@ -33,10 +35,13 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   borrowedBooks: {
-    type: [mongoose.Types.ObjectId],
+    type: [Schema.Types.ObjectId],
+    ref: 'Book',
   },
-  isAdmin: {
-    type: Boolean,
+  role: {
+    type: String,
+    enum: ['USER', 'ADMIN'],
+    default: 'USER',
     required: true,
   },
 })
