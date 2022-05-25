@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/member-delimiter-style */
 import mongoose, { Document, Schema } from 'mongoose'
 
+export enum Status {
+  Available = 'AVAILABLE',
+  Borrowed = 'BORROWED',
+}
+
 export type BookDocument = Document & {
   isbn: string
   title: string
@@ -9,6 +14,7 @@ export type BookDocument = Document & {
   publisher: string
   authors: string[]
   publishedYear: number
+  numPage: number
   status: string
   borrowerId: string
   borrowDate: Date
@@ -41,8 +47,7 @@ const bookSchema = new mongoose.Schema({
     required: true,
   },
   authors: {
-    type: [Schema.Types.ObjectId],
-    ref: 'Author',
+    type: [{ type: Schema.Types.ObjectId, ref: 'Author' }],
     index: true,
     required: true,
   },
@@ -50,10 +55,14 @@ const bookSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  numPage: {
+    type: Number,
+    required: true,
+  },
   status: {
     type: String,
-    enum: ['AVAILABLE', 'BORROWED'],
-    default: 'AVAILABLE',
+    enum: Status,
+    default: Status.Available,
     index: true,
     required: true,
   },

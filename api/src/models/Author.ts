@@ -12,11 +12,13 @@ export type AuthorDocument = Document & {
 const authorSchema = new mongoose.Schema({
   firstName: {
     type: String,
+    index: true,
     required: true,
     maxLength: 100,
   },
   lastName: {
     type: String,
+    index: true,
     required: true,
     maxLength: 100,
   },

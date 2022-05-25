@@ -2,6 +2,7 @@ import express from 'express'
 // import lusca from 'lusca' will be used later
 import dotenv from 'dotenv'
 
+import initRouter from './routers/initLibrary'
 import bookRouter from './routers/book'
 import apiErrorHandler from './middlewares/apiErrorHandler'
 import apiContentType from './middlewares/apiContentType'
@@ -17,6 +18,7 @@ app.use(apiContentType)
 app.use(express.json())
 
 // Set up routers
+app.use('/api/v1/', initRouter)
 app.use('/api/v1/books', bookRouter)
 
 // Custom API error handler

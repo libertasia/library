@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/member-delimiter-style */
 import mongoose, { Document, Schema } from 'mongoose'
 
+export enum Role {
+  User = 'USER',
+  Admin = 'ADMIN',
+}
+
 export type UserDocument = Document & {
   firstName: string
   lastName: string
@@ -40,8 +45,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['USER', 'ADMIN'],
-    default: 'USER',
+    enum: Role,
+    default: Role.User,
     required: true,
   },
 })
