@@ -3,11 +3,9 @@ import { Schema } from 'mongoose'
 
 import Book from '../models/Book'
 import Author, { AuthorDocument } from '../models/Author'
+import User, { UserDocument } from '../models/User'
 import { BadRequestError } from '../helpers/apiError'
 import Category, { CategoryDocument } from '../models/Category'
-
-// const authors = []
-// const categories = []
 
 async function authorCreate(
   firstName: string,
@@ -15,19 +13,19 @@ async function authorCreate(
   birthYear: number,
   biography: string
 ) {
-  const authordetail = {
+  const authorDetail = {
     firstName,
     lastName,
     birthYear,
     biography,
     books: [],
   }
-  console.log(authordetail)
+  console.log(authorDetail)
 
-  const author = new Author(authordetail)
+  const author = new Author(authorDetail)
 
   const saved = await author.save()
-  //authors.push(saved)
+
   return saved
 }
 
@@ -40,7 +38,33 @@ async function categoryCreate(title: string) {
   console.log(category)
 
   const saved = await category.save()
-  //categories.push(saved)
+
+  return saved
+}
+
+async function userCreate(
+  firstName: string,
+  lastName: string,
+  email: string,
+  userName: string,
+  password: string,
+  role: string
+) {
+  const userDetail = {
+    firstName,
+    lastName,
+    email,
+    userName,
+    password,
+    borrowedBooks: [],
+    role,
+  }
+  console.log(userDetail)
+
+  const user = new User(userDetail)
+
+  const saved = await user.save()
+
   return saved
 }
 
@@ -87,9 +111,12 @@ export const populateDb = async (
     await Book.deleteMany()
     await Author.deleteMany()
     await Category.deleteMany()
+    await User.deleteMany()
 
     const authors: AuthorDocument[] = []
     const categories: CategoryDocument[] = []
+    const users: UserDocument[] = []
+
     for (let i = 0; i < 10; i++) {
       const name = `Author ${i}`
       const author = await authorCreate(
@@ -111,6 +138,25 @@ export const populateDb = async (
       const categoryDoc = await categoryCreate(categoriesTitles[i])
       categories.push(categoryDoc)
     }
+    for (let i = 0; i < 2; i++) {
+      const firstName = `User ${i} firstname`
+      const lastName = `User ${i} lastname`
+      const email = `User ${i} email`
+      const userName = `User ${i} username`
+      const password = `User ${i} password`
+      const roles = ['USER', 'ADMIN']
+      const role = roles[i]
+      const userDoc = await userCreate(
+        firstName,
+        lastName,
+        email,
+        userName,
+        password,
+        role
+      )
+      users.push(userDoc)
+    }
+
     for (let i = 0; i < 10; i++) {
       const title = `Book title ${i}`
       const isbn = `ISBN ${i}`

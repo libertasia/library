@@ -1,7 +1,8 @@
-import Book, { BookDocument } from '../models/Book'
+import Book, { BookDocument, Status } from '../models/Book'
 import Author from '../models/Author'
 import Category from '../models/Category'
 import { NotFoundError } from '../helpers/apiError'
+import User from '../models/User'
 
 const findAll = async (): Promise<BookDocument[]> => {
   return Book.find()
@@ -32,6 +33,7 @@ const findById = async (bookId: string): Promise<BookDocument> => {
   const foundBook = await Book.findById(bookId)
     .populate('authors', 'firstName lastName')
     .populate('category')
+
   if (!foundBook) {
     throw new NotFoundError(`Book ${bookId} not found`)
   }
@@ -142,6 +144,72 @@ const findByQuery = async (
   return foundBooks
 }
 
+const borrowBook = async (
+  bookId: string,
+  userId: string
+): Promise<BookDocument | null> => {
+  const currentDate = new Date()
+  const loanDurationDays = 7
+  const returnDate = new Date(
+    currentDate.setDate(currentDate.getDate() + loanDurationDays)
+  )
+  const bookUpdate = {
+    status: Status.Borrowed,
+    borrowerId: userId,
+    borrowDate: new Date(),
+    returnDate,
+  }
+  const foundBook = await Book.findByIdAndUpdate(bookId, bookUpdate, {
+    new: true,
+  })
+  if (!foundBook) {
+    throw new NotFoundError(`Book ${bookId} not found`)
+  }
+  const foundUser = await User.findById(userId)
+  if (!foundUser) {
+    throw new NotFoundError(`User ${userId} not found`)
+  }
+  if (foundUser.borrowedBooks.indexOf(bookId) == -1) {
+    foundUser.borrowedBooks.push(bookId)
+    await foundUser.save()
+  }
+
+  return foundBook
+}
+
+const returnBook = async (
+  bookId: string,
+  userId: string
+): Promise<BookDocument | null> => {
+  const bookUpdate = {
+    $set: {
+      status: Status.Available,
+    },
+    $unset: {
+      borrowerId: null,
+      borrowDate: null,
+      returnDate: null,
+    },
+  }
+  const foundBook = await Book.findByIdAndUpdate(bookId, bookUpdate, {
+    new: true,
+  })
+  if (!foundBook) {
+    throw new NotFoundError(`Book ${bookId} not found`)
+  }
+  const foundUser = await User.findById(userId)
+  if (!foundUser) {
+    throw new NotFoundError(`User ${userId} not found`)
+  }
+  if (foundUser.borrowedBooks.indexOf(bookId) != -1) {
+    foundUser.borrowedBooks = foundUser.borrowedBooks.filter(
+      (book) => book != bookId
+    )
+    await foundUser.save()
+  }
+  return foundBook
+}
+
 export default {
   findAll,
   getBookCount,
@@ -151,4 +219,6 @@ export default {
   findByIsbn,
   findByAuthor,
   findByQuery,
+  borrowBook,
+  returnBook,
 }

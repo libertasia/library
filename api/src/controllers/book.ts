@@ -84,3 +84,43 @@ export const findBookById = async (
     }
   }
 }
+
+// POST /books/:bookid/borrow
+export const borrowBook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const bookId = req.params.bookId
+    const userId = req.body.userId
+    const updatedBook = await BookService.borrowBook(bookId, userId)
+    res.json(updatedBook)
+  } catch (error) {
+    if (error instanceof Error && error.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', error))
+    } else {
+      next(error)
+    }
+  }
+}
+
+// POST /books/:bookId/return
+export const returnBook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const bookId = req.params.bookId
+    const userId = req.body.userId
+    const updatedBook = await BookService.returnBook(bookId, userId)
+    res.json(updatedBook)
+  } catch (error) {
+    if (error instanceof Error && error.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', error))
+    } else {
+      next(error)
+    }
+  }
+}

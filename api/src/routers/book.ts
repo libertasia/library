@@ -5,6 +5,8 @@ import {
   getBookCount,
   findBookById,
   findBooks,
+  borrowBook,
+  returnBook,
 } from '../controllers/book'
 
 const router = express.Router()
@@ -14,5 +16,8 @@ router.get('/', findAllPaginated)
 router.get('/count', getBookCount)
 router.get('/search', findBooks)
 router.get('/:bookId', findBookById)
+
+router.post('/:bookId/borrow', borrowBook)
+router.post('/:bookId/return', returnBook)
 
 export default router
