@@ -2,10 +2,12 @@ import { Request, Response, NextFunction } from 'express'
 import { Schema } from 'mongoose'
 
 import Book from '../models/Book'
-import Author from '../models/Author'
+import Author, { AuthorDocument } from '../models/Author'
 import { BadRequestError } from '../helpers/apiError'
+import Category, { CategoryDocument } from '../models/Category'
 
-const authors = []
+// const authors = []
+// const categories = []
 
 async function authorCreate(
   firstName: string,
@@ -25,14 +27,27 @@ async function authorCreate(
   const author = new Author(authordetail)
 
   const saved = await author.save()
-  authors.push(saved)
+  //authors.push(saved)
+  return saved
+}
+
+async function categoryCreate(title: string) {
+  const categoryDetail = {
+    title,
+  }
+
+  const category = new Category(categoryDetail)
+  console.log(category)
+
+  const saved = await category.save()
+  //categories.push(saved)
   return saved
 }
 
 async function bookCreate(
   isbn: string,
   title: string,
-  category: string,
+  category: Schema.Types.ObjectId,
   description: string,
   publisher: string,
   authors: Schema.Types.ObjectId[],
@@ -51,8 +66,10 @@ async function bookCreate(
     numPage,
     status,
   }
+  console.log(bookdetail)
 
   const book = new Book(bookdetail)
+  console.log(book)
   return await book.save()
 }
 
@@ -69,8 +86,10 @@ export const populateDb = async (
   try {
     await Book.deleteMany()
     await Author.deleteMany()
+    await Category.deleteMany()
 
-    const authors = []
+    const authors: AuthorDocument[] = []
+    const categories: CategoryDocument[] = []
     for (let i = 0; i < 10; i++) {
       const name = `Author ${i}`
       const author = await authorCreate(
@@ -81,10 +100,22 @@ export const populateDb = async (
       )
       authors.push(author)
     }
+    const categoriesTitles = [
+      'Classics',
+      'Detective',
+      'Fantasy',
+      'Romance',
+      'Biography',
+    ]
+    for (let i = 0; i < categoriesTitles.length - 1; i++) {
+      const categoryDoc = await categoryCreate(categoriesTitles[i])
+      categories.push(categoryDoc)
+    }
     for (let i = 0; i < 10; i++) {
       const title = `Book title ${i}`
       const isbn = `ISBN ${i}`
-      const category = `Category ${i}`
+      const category =
+        categories[randomIntFromInterval(0, categories.length - 1)]._id
       const desc = `Description ${i}`
       const publisher = `Publisher ${i}`
       const author1 = authors[randomIntFromInterval(0, authors.length - 1)]

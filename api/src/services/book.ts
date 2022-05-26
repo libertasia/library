@@ -1,11 +1,12 @@
 import Book, { BookDocument } from '../models/Book'
 import Author from '../models/Author'
+import Category from '../models/Category'
 import { NotFoundError } from '../helpers/apiError'
-import mongoose from 'mongoose'
 
 const findAll = async (): Promise<BookDocument[]> => {
   return Book.find()
     .populate('authors', 'firstName lastName')
+    .populate('category')
     .sort({ title: 1, publishedYear: -1 })
 }
 
@@ -21,17 +22,16 @@ const findAllPaginated = async (
   const perPage = parseInt(perPageCount) || 10
   return Book.find()
     .populate('authors', 'firstName lastName')
+    .populate('category')
     .limit(perPage)
     .skip(perPage * (page - 1))
     .sort({ title: 1, publishedYear: -1 })
 }
 
 const findById = async (bookId: string): Promise<BookDocument> => {
-  const foundBook = await Book.findById(bookId).populate(
-    'authors',
-    'firstName lastName'
-  )
-
+  const foundBook = await Book.findById(bookId)
+    .populate('authors', 'firstName lastName')
+    .populate('category')
   if (!foundBook) {
     throw new NotFoundError(`Book ${bookId} not found`)
   }
@@ -44,6 +44,7 @@ const findByTitle = async (titleQuery: string): Promise<BookDocument[]> => {
     title: { $regex: `${titleQuery}`, $options: 'i' },
   })
     .populate('authors', 'firstName lastName')
+    .populate('category')
     .sort({ title: 1, publishedYear: -1 })
   return foundBooks
 }
@@ -53,6 +54,7 @@ const findByIsbn = async (isbnQuery: string): Promise<BookDocument[]> => {
     isbn: { $regex: `${isbnQuery}`, $options: 'i' },
   })
     .populate('authors', 'firstName lastName')
+    .populate('category')
     .sort({ title: 1, publishedYear: -1 })
   return foundBooks
 }
@@ -71,7 +73,9 @@ const findByAuthor = async (authorQuery: string): Promise<BookDocument[]> => {
   const authorIds = foundAuthors.map((authorDoc) => authorDoc._id)
   const foundBooks = Book.find({
     authors: { $in: authorIds },
-  }).populate('authors', 'firstName lastName')
+  })
+    .populate('authors', 'firstName lastName')
+    .populate('category')
   return foundBooks
 }
 
@@ -82,7 +86,7 @@ const findByQuery = async (
   statuses: string[],
   categories: string[]
 ): Promise<BookDocument[]> => {
-  const query = Book.find()
+  let query = Book.find()
   let titleQuery = {}
   let authorQuery = {}
   let isbnQuery = {}
@@ -122,16 +126,19 @@ const findByQuery = async (
     andArray.push(statusQuery)
   }
   if (categories && categories.length > 0) {
-    categoryQuery = {
-      $or: categories.map((categoryElem) => {
-        return { category: { $regex: `${categoryElem}`, $options: 'i' } }
-      }),
-    }
+    const regexArray = categories.map((name) => new RegExp(name, 'i'))
+    const foundCategories = await Category.find({ title: { $in: regexArray } })
+    const categoriesIds = foundCategories.map((catDoc) => catDoc._id)
+    categoryQuery = { category: { $in: categoriesIds } }
     andArray.push(categoryQuery)
   }
+  if (andArray.length > 0) {
+    query = query.and(andArray)
+  }
+
   const foundBooks = await query
-    .and(andArray)
     .populate('authors', 'firstName lastName')
+    .populate('category')
   return foundBooks
 }
 
