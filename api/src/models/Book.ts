@@ -2,8 +2,8 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
 export enum Status {
-  Available = 'AVAILABLE',
-  Borrowed = 'BORROWED',
+  AVAILABLE = 'AVAILABLE',
+  BORROWED = 'BORROWED',
 }
 
 export type BookDocument = Document & {
@@ -63,7 +63,7 @@ const bookSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: Status,
-    default: Status.Available,
+    default: Status.AVAILABLE,
     index: true,
     required: true,
   },

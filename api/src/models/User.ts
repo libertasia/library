@@ -2,8 +2,8 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
 export enum Role {
-  User = 'USER',
-  Admin = 'ADMIN',
+  USER = 'USER',
+  ADMIN = 'ADMIN',
 }
 
 export type UserDocument = Document & {
@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: Role,
-    default: Role.User,
+    default: Role.USER,
     required: true,
   },
 })

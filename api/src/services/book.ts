@@ -154,7 +154,7 @@ const borrowBook = async (
     currentDate.setDate(currentDate.getDate() + loanDurationDays)
   )
   const bookUpdate = {
-    status: Status.Borrowed,
+    status: Status.BORROWED,
     borrowerId: userId,
     borrowDate: new Date(),
     returnDate,
@@ -183,7 +183,7 @@ const returnBook = async (
 ): Promise<BookDocument | null> => {
   const bookUpdate = {
     $set: {
-      status: Status.Available,
+      status: Status.AVAILABLE,
     },
     $unset: {
       borrowerId: null,
