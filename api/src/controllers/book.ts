@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 
+import Book from '../models/Book'
 import BookService from '../services/book'
 import { BadRequestError } from '../helpers/apiError'
 
@@ -116,6 +117,84 @@ export const returnBook = async (
     const userId = req.body.userId
     const updatedBook = await BookService.returnBook(bookId, userId)
     res.json(updatedBook)
+  } catch (error) {
+    if (error instanceof Error && error.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', error))
+    } else {
+      next(error)
+    }
+  }
+}
+
+// POST /books/create
+export const createBook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const {
+      isbn,
+      title,
+      categoryId,
+      description,
+      publisher,
+      authorsIds,
+      publishedYear,
+      numPage,
+    } = req.body
+
+    const book = new Book({
+      isbn,
+      title,
+      category: categoryId,
+      description,
+      publisher,
+      authors: authorsIds,
+      publishedYear,
+      numPage,
+    })
+
+    await BookService.createBook(book)
+    res.json(book)
+  } catch (error) {
+    if (error instanceof Error && error.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', error))
+    } else {
+      next(error)
+    }
+  }
+}
+
+// PUT /books/:bookId/update
+export const updateBook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const update = req.body
+    const bookId = req.params.bookId
+    const updatedBook = await BookService.updateBook(bookId, update)
+    res.json(updatedBook)
+  } catch (error) {
+    if (error instanceof Error && error.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', error))
+    } else {
+      next(error)
+    }
+  }
+}
+
+// DELETE /books/:bookId/delete
+export const deleteBook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await BookService.deleteBook(req.params.bookId)
+    res.status(204).end()
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', error))

@@ -1,8 +1,8 @@
 import Book, { BookDocument, Status } from '../models/Book'
+import User from '../models/User'
 import Author from '../models/Author'
 import Category from '../models/Category'
 import { NotFoundError } from '../helpers/apiError'
-import User from '../models/User'
 
 const findAll = async (): Promise<BookDocument[]> => {
   return Book.find()
@@ -210,6 +210,90 @@ const returnBook = async (
   return foundBook
 }
 
+const createBook = async (book: BookDocument): Promise<BookDocument> => {
+  const newBook = await book.save()
+  for (let i = 0; i < newBook.authors.length; i++) {
+    const authorId = newBook.authors[i]
+    const foundAuthor = await Author.findById(authorId)
+    if (!foundAuthor) {
+      throw new NotFoundError(`Author ${authorId} not found`)
+    }
+    foundAuthor.books.push(newBook._id)
+    await foundAuthor.save()
+  }
+  return newBook
+}
+
+const updateBook = async (
+  bookId: string,
+  update: Partial<BookDocument>
+): Promise<BookDocument | null> => {
+  const originalBook = await Book.findById(bookId)
+  if (!originalBook) {
+    throw new NotFoundError(`Book ${bookId} not found`)
+  }
+  const updatedBook = await Book.findByIdAndUpdate(bookId, update, {
+    new: true,
+  })
+  if (!updatedBook) {
+    throw new NotFoundError(`Book ${bookId} not found`)
+  }
+
+  // if author was removed, we need to remove this book from author's list of books
+  for (let i = 0; i < originalBook.authors.length; i++) {
+    const originalAuthorId = originalBook.authors[i]
+    if (updatedBook.authors.indexOf(originalAuthorId) == -1) {
+      const originalAuthor = await Author.findById(originalAuthorId)
+      if (!originalAuthor) {
+        throw new NotFoundError(`Author ${originalAuthorId} not found`)
+      }
+      originalAuthor.books = originalAuthor.books.filter(
+        (book) => book != bookId
+      )
+      await originalAuthor.save()
+    }
+  }
+
+  // make sure all book authors have this book in their list
+  for (let i = 0; i < updatedBook.authors.length; i++) {
+    const updatedAuthorId = updatedBook.authors[i]
+    const updatedAuthor = await Author.findById(updatedAuthorId)
+    if (!updatedAuthor) {
+      throw new NotFoundError(`Author ${updatedAuthorId} not found`)
+    }
+    if (updatedAuthor.books.indexOf(bookId) == -1) {
+      updatedAuthor.books.push(bookId)
+      await updatedAuthor.save()
+    }
+  }
+
+  return updatedBook
+}
+
+const deleteBook = async (bookId: string): Promise<BookDocument | null> => {
+  const foundBook = await Book.findById(bookId)
+
+  if (!foundBook) {
+    throw new NotFoundError(`Book ${bookId} not found`)
+  }
+
+  if (foundBook.status === Status.BORROWED) {
+    throw new NotFoundError(`Borrowed Book ${bookId} can't be deleted`)
+  }
+
+  for (let i = 0; i < foundBook.authors.length; i++) {
+    const authorId = foundBook.authors[i]
+    const foundAuthor = await Author.findById(authorId)
+    if (!foundAuthor) {
+      throw new NotFoundError(`Author ${authorId} not found`)
+    }
+    foundAuthor.books = foundAuthor.books.filter((book) => book != bookId)
+    await foundAuthor.save()
+  }
+
+  return await foundBook.delete()
+}
+
 export default {
   findAll,
   getBookCount,
@@ -221,4 +305,7 @@ export default {
   findByQuery,
   borrowBook,
   returnBook,
+  createBook,
+  deleteBook,
+  updateBook,
 }

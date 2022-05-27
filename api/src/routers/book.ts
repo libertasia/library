@@ -7,6 +7,9 @@ import {
   findBooks,
   borrowBook,
   returnBook,
+  createBook,
+  deleteBook,
+  updateBook,
 } from '../controllers/book'
 
 const router = express.Router()
@@ -17,7 +20,12 @@ router.get('/count', getBookCount)
 router.get('/search', findBooks)
 router.get('/:bookId', findBookById)
 
+router.post('/create', createBook)
 router.post('/:bookId/borrow', borrowBook)
 router.post('/:bookId/return', returnBook)
+
+router.put('/:bookId/update', updateBook)
+
+router.delete('/:bookId/delete', deleteBook)
 
 export default router

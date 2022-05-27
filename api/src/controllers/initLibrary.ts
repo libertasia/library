@@ -4,8 +4,8 @@ import { Schema } from 'mongoose'
 import Book from '../models/Book'
 import Author, { AuthorDocument } from '../models/Author'
 import User, { UserDocument } from '../models/User'
-import { BadRequestError } from '../helpers/apiError'
 import Category, { CategoryDocument } from '../models/Category'
+import { BadRequestError } from '../helpers/apiError'
 
 async function authorCreate(
   firstName: string,
