@@ -28,12 +28,19 @@ const update = async (
   update: Partial<UserDocument>
 ): Promise<UserDocument | null> => {
   const foundUsers = await User.find({
-    $or: [
+    $and: [
       {
-        email: update.email,
+        $or: [
+          {
+            email: update.email,
+          },
+          {
+            userName: update.userName,
+          },
+        ],
       },
       {
-        userName: update.userName,
+        _id: { $ne: userId },
       },
     ],
   })
