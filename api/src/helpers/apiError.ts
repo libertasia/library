@@ -43,3 +43,12 @@ export class BadRequestError extends ApiError {
     super(400, message, source)
   }
 }
+
+export class ExpectationFailedError extends ApiError {
+  constructor(
+    readonly message: string = 'Expectation Failed',
+    source?: Error | any
+  ) {
+    super(417, message, source)
+  }
+}

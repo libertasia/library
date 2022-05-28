@@ -2,7 +2,7 @@ import Book, { BookDocument, Status } from '../models/Book'
 import User from '../models/User'
 import Author from '../models/Author'
 import Category from '../models/Category'
-import { NotFoundError } from '../helpers/apiError'
+import { ExpectationFailedError, NotFoundError } from '../helpers/apiError'
 
 const findAll = async (): Promise<BookDocument[]> => {
   return Book.find()
@@ -278,7 +278,7 @@ const deleteBook = async (bookId: string): Promise<BookDocument | null> => {
   }
 
   if (foundBook.status === Status.BORROWED) {
-    throw new NotFoundError(`Borrowed Book ${bookId} can't be deleted`)
+    throw new ExpectationFailedError(`Borrowed Book ${bookId} can't be deleted`)
   }
 
   for (let i = 0; i < foundBook.authors.length; i++) {
