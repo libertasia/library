@@ -6,6 +6,7 @@ import initRouter from './routers/initLibrary'
 import categoryRouter from './routers/category'
 import bookRouter from './routers/book'
 import authorRouter from './routers/author'
+import userRouter from './routers/user'
 import apiErrorHandler from './middlewares/apiErrorHandler'
 import apiContentType from './middlewares/apiContentType'
 
@@ -24,6 +25,7 @@ app.use('/api/v1/', initRouter)
 app.use('/api/v1/categories', categoryRouter)
 app.use('/api/v1/books', bookRouter)
 app.use('/api/v1/authors', authorRouter)
+app.use('/api/v1/users', userRouter)
 
 // Custom API error handler
 app.use(apiErrorHandler)
