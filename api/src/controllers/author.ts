@@ -37,8 +37,8 @@ export const createAuthor = async (
       biography,
     })
 
-    await AuthorService.createAuthor(author)
-    res.json(author)
+    const savedAuthor = await AuthorService.createAuthor(author)
+    res.json({ author: savedAuthor })
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', error))

@@ -155,8 +155,8 @@ export const createBook = async (
       numPage,
     })
 
-    await BookService.createBook(book)
-    res.json(book)
+    const savedBook = await BookService.createBook(book)
+    res.json({ book: savedBook })
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', error))
