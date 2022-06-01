@@ -1,23 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import axios from 'axios'
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
+
 import './App.css';
 
 function App() {
+  const [token, setToken] = useState('')
+  console.log('token:', token)
+  const handleSucess = async (googleResponse: any) => {
+    const tokenId = googleResponse.credential
+    console.log('tokenId:', tokenId)
+
+    const res = await axios.post(
+      'http://localhost:5000/api/v1/auth/google-login',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${tokenId}`,
+        },
+      }
+    )
+    const token = res.data.token
+    setToken(token)
+  }
+
+  const clientId ='795168561931-jjtt0ika6lajfjlke65rn0kfcg16gvaf.apps.googleusercontent.com'
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <GoogleOAuthProvider clientId={clientId}>
+          <GoogleLogin onSuccess={handleSucess} />
+        </GoogleOAuthProvider>
       </header>
     </div>
   );
