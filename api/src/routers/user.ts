@@ -1,11 +1,12 @@
 import express from 'express'
 
-import { updateUser } from '../controllers/user'
+import { updateUser, getCurrentUser } from '../controllers/user'
 import verifyAuth from '../middlewares/verifyAuth'
 
 const router = express.Router()
 
 // Every path we define here will get /api/v1/users prefix
+router.get('/current', verifyAuth, getCurrentUser)
 
 router.put('/:userId/update', verifyAuth, updateUser)
 

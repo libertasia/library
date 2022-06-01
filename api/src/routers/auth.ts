@@ -18,6 +18,7 @@ router.post(
     const token = jwt.sign({ email: user.email, role: user.role }, JWT_SECRET, {
       expiresIn: '1h',
     })
+    res.cookie('token', token, { httpOnly: true })
     res.json({ token })
   }
 )

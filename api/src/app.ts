@@ -3,6 +3,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import passport from 'passport'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 import initRouter from './routers/initLibrary'
 import authRouter from './routers/auth'
@@ -24,6 +25,7 @@ app.set('port', process.env.PORT || 3000)
 app.use(apiContentType)
 app.use(express.json())
 app.use(cors())
+app.use(cookieParser())
 
 app.use(passport.initialize())
 passport.use(loginWithGoogle())
