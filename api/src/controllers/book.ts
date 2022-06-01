@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
 
+import { Role } from '../models/User'
 import Book from '../models/Book'
 import BookService from '../services/book'
-import { BadRequestError } from '../helpers/apiError'
+import { BadRequestError, ForbiddenError } from '../helpers/apiError'
 
 // GET /books
 export const findAllPaginated = async (
@@ -133,6 +134,13 @@ export const createBook = async (
   next: NextFunction
 ) => {
   try {
+    const user = req.user as { role: Role }
+    const isAdmin = user.role === Role.ADMIN
+
+    if (!isAdmin) {
+      throw new ForbiddenError()
+    }
+
     const {
       isbn,
       title,
@@ -173,6 +181,13 @@ export const updateBook = async (
   next: NextFunction
 ) => {
   try {
+    const user = req.user as { role: Role }
+    const isAdmin = user.role === Role.ADMIN
+
+    if (!isAdmin) {
+      throw new ForbiddenError()
+    }
+
     const update = req.body
     const bookId = req.params.bookId
     const updatedBook = await BookService.updateBook(bookId, update)
@@ -193,6 +208,13 @@ export const deleteBook = async (
   next: NextFunction
 ) => {
   try {
+    const user = req.user as { role: Role }
+    const isAdmin = user.role === Role.ADMIN
+
+    if (!isAdmin) {
+      throw new ForbiddenError()
+    }
+
     await BookService.deleteBook(req.params.bookId)
     res.status(204).end()
   } catch (error) {

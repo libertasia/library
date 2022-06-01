@@ -1,28 +1,6 @@
 import User, { UserDocument } from '../models/User'
 import { BadRequestError, NotFoundError } from '../helpers/apiError'
 
-const signUp = async (user: UserDocument): Promise<UserDocument> => {
-  const foundUsers = await User.find({
-    $or: [
-      {
-        email: user.email,
-      },
-      {
-        password: user.password,
-      },
-      {
-        userName: user.userName,
-      },
-    ],
-  })
-
-  if (foundUsers.length > 0) {
-    throw new BadRequestError('User has already existed in the system')
-  }
-
-  return user.save()
-}
-
 const update = async (
   userId: string,
   update: Partial<UserDocument>
@@ -31,9 +9,6 @@ const update = async (
     $and: [
       {
         $or: [
-          {
-            email: update.email,
-          },
           {
             userName: update.userName,
           },
@@ -47,7 +22,7 @@ const update = async (
 
   if (foundUsers.length > 0) {
     throw new BadRequestError(
-      'User with this email or userName has already existed in the system'
+      'User with this userName has already existed in the system'
     )
   }
 
@@ -62,7 +37,21 @@ const update = async (
   return foundUser
 }
 
+const save = async (user: UserDocument): Promise<UserDocument> => {
+  return user.save()
+}
+
+const findAll = async (): Promise<UserDocument[]> => {
+  return User.find()
+}
+const findOne = async (email: string): Promise<UserDocument | null> => {
+  console.log('email:', email)
+  return User.findOne({ email })
+}
+
 export default {
-  signUp,
   update,
+  save,
+  findAll,
+  findOne,
 }

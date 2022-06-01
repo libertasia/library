@@ -1,13 +1,12 @@
 import express from 'express'
 
-import { signUpUser, updateUser } from '../controllers/user'
+import { updateUser } from '../controllers/user'
+import verifyAuth from '../middlewares/verifyAuth'
 
 const router = express.Router()
 
 // Every path we define here will get /api/v1/users prefix
 
-router.post('/signup', signUpUser)
-
-router.put('/:userId/update', updateUser)
+router.put('/:userId/update', verifyAuth, updateUser)
 
 export default router

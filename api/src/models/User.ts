@@ -6,25 +6,24 @@ export enum Role {
   ADMIN = 'ADMIN',
 }
 
-export type UserDocument = Document & {
+export type User = {
   firstName: string
   lastName: string
   email: string
   userName: string
-  password: string
   borrowedBooks: string[]
   role: string
 }
 
+export type UserDocument = Document & User
+
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: true,
     maxLength: 100,
   },
   lastName: {
     type: String,
-    required: true,
     maxLength: 100,
   },
   email: {
@@ -35,12 +34,6 @@ const userSchema = new mongoose.Schema({
   userName: {
     type: String,
     unique: true,
-    required: true,
-  },
-  password: {
-    type: String,
-    unique: true,
-    required: true,
   },
   borrowedBooks: {
     type: [Schema.Types.ObjectId],
