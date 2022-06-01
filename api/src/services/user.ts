@@ -5,27 +5,6 @@ const update = async (
   userId: string,
   update: Partial<UserDocument>
 ): Promise<UserDocument | null> => {
-  const foundUsers = await User.find({
-    $and: [
-      {
-        $or: [
-          {
-            userName: update.userName,
-          },
-        ],
-      },
-      {
-        _id: { $ne: userId },
-      },
-    ],
-  })
-
-  if (foundUsers.length > 0) {
-    throw new BadRequestError(
-      'User with this userName has already existed in the system'
-    )
-  }
-
   const foundUser = await User.findByIdAndUpdate(userId, update, {
     new: true,
   })
