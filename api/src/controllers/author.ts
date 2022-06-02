@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 
-import { Role } from '../models/User'
 import Author from '../models/Author'
 import AuthorService from '../services/author'
 import { BadRequestError, ForbiddenError } from '../helpers/apiError'
@@ -29,13 +28,6 @@ export const createAuthor = async (
   next: NextFunction
 ) => {
   try {
-    const user = req.user as { role: Role }
-    const isAdmin = user.role === Role.ADMIN
-
-    if (!isAdmin) {
-      throw new ForbiddenError()
-    }
-
     const { firstName, lastName, birthYear, biography } = req.body
 
     const author = new Author({
@@ -63,13 +55,6 @@ export const updateAuthor = async (
   next: NextFunction
 ) => {
   try {
-    const user = req.user as { role: Role }
-    const isAdmin = user.role === Role.ADMIN
-
-    if (!isAdmin) {
-      throw new ForbiddenError()
-    }
-
     const update = req.body
     const authorId = req.params.authorId
     const updatedAuthor = await AuthorService.updateAuthor(authorId, update)
@@ -90,13 +75,6 @@ export const deleteAuthor = async (
   next: NextFunction
 ) => {
   try {
-    const user = req.user as { role: Role }
-    const isAdmin = user.role === Role.ADMIN
-
-    if (!isAdmin) {
-      throw new ForbiddenError()
-    }
-
     await AuthorService.deleteAuthor(req.params.authorId)
     res.status(204).end()
   } catch (error) {

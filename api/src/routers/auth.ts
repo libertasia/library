@@ -19,7 +19,10 @@ router.post(
       expiresIn: '1h',
     })
     res.cookie('token', token, { httpOnly: true })
-    res.json({ token })
+    res.json({
+      message: 'Successfully logged in',
+      token,
+    })
   }
 )
 

@@ -33,7 +33,8 @@ export const getCurrentUser = async (
 ) => {
   try {
     const user = req.user as User
-    res.json(user)
+    const currentUser = await UserService.findOne(user.email)
+    res.json(currentUser)
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', error))

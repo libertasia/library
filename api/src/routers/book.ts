@@ -12,6 +12,7 @@ import {
   updateBook,
 } from '../controllers/book'
 import verifyAuth from '../middlewares/verifyAuth'
+import adminRequired from '../middlewares/adminRequired'
 
 const router = express.Router()
 
@@ -21,12 +22,12 @@ router.get('/count', getBookCount)
 router.get('/search', findBooks)
 router.get('/:bookId', findBookById)
 
-router.post('/create', verifyAuth, createBook)
+router.post('/create', verifyAuth, adminRequired, createBook)
 router.post('/:bookId/borrow', verifyAuth, borrowBook)
 router.post('/:bookId/return', verifyAuth, returnBook)
 
-router.put('/:bookId/update', verifyAuth, updateBook)
+router.put('/:bookId/update', verifyAuth, adminRequired, updateBook)
 
-router.delete('/:bookId/delete', verifyAuth, deleteBook)
+router.delete('/:bookId/delete', verifyAuth, adminRequired, deleteBook)
 
 export default router

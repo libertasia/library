@@ -21,11 +21,11 @@ const save = async (user: UserDocument): Promise<UserDocument> => {
 }
 
 const findAll = async (): Promise<UserDocument[]> => {
-  return User.find()
+  return User.find().populate('borrowedBooks')
 }
 const findOne = async (email: string): Promise<UserDocument | null> => {
   console.log('email:', email)
-  return User.findOne({ email })
+  return User.findOne({ email }).populate('borrowedBooks')
 }
 
 export default {
