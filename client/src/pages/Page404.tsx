@@ -4,6 +4,8 @@ import { Button, Typography, Container, Box } from '@mui/material'
 
 import NotFoundImage from '../assets/images/illustration_404.svg'
 
+// ----------------------------------------------------------------------
+
 const ContentStyle = styled('div')(({ theme }) => ({
   maxWidth: 480,
   margin: 'auto',
@@ -13,6 +15,8 @@ const ContentStyle = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   padding: theme.spacing(12, 0),
 }))
+
+// ----------------------------------------------------------------------
 
 export default function Page404() {
   return (
@@ -34,7 +38,12 @@ export default function Page404() {
           sx={{ height: 260, mx: 'auto', my: { xs: 5, sm: 10 } }}
         />
 
-        <Button to="/" size="large" variant="contained" component={RouterLink}>
+        <Button
+          to="/dashboard/books"
+          size="large"
+          variant="contained"
+          component={RouterLink}
+        >
           Go to Home Page
         </Button>
       </ContentStyle>
