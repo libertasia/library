@@ -17,7 +17,7 @@ const navConfig = [
   },
   {
     title: 'login',
-    path: '/login',
+    path: '/dashboard/login',
     icon: getIcon('eva:lock-fill'),
   },
 ]

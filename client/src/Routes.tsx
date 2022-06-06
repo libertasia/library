@@ -4,6 +4,7 @@ import { Navigate, useRoutes } from 'react-router-dom'
 // layouts
 import DashboardLayout from './layouts/DashboardLayout'
 import Home from './pages/Home'
+import Login from './pages/Login'
 import Page404 from './pages/Page404'
 
 // const AppRoutes = () => (
@@ -21,7 +22,7 @@ export default function AppRoutes() {
       element: <DashboardLayout />,
       children: [
         { path: 'books', element: <Home /> },
-        // { path: 'user', element: <User /> },
+        { path: 'login', element: <Login /> },
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> },
       ],
