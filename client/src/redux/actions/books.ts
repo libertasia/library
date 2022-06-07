@@ -17,8 +17,16 @@ import {
   LoadBooksCountFailureAction,
   BooksState,
   BooksPropType,
+  ResetBooksLoadedStatusAction,
+  RESET_BOOKS_LOADED_STATUS,
   //BookType,
 } from '../../types'
+
+export function resetBooksLoadedStatus(): ResetBooksLoadedStatusAction {
+  return {
+    type: RESET_BOOKS_LOADED_STATUS,
+  }
+}
 
 export function loadBooksRequest(): LoadBooksRequestAction {
   return {
@@ -94,7 +102,7 @@ export function getBooksCount() {
     dispatch(loadBooksCountRequest())
     try {
       const res = await axios.get('http://localhost:5000/api/v1/books/count')
-      const booksCount = res.data
+      const booksCount: number = res.data
       dispatch(loadBooksCountSuccess(booksCount))
     } catch (error: any) {
       if (error.response.status === 404) {

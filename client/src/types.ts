@@ -24,6 +24,10 @@ export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE'
 export const SET_STATUS_FILTERS = 'SET_STATUS_FILTERS'
 export const SET_CATEGORY_FILTERS = 'SET_CATEGORY_FILTERS'
 
+export const SET_PAGE = 'SET_PAGE'
+export const SET_ROWS_PER_PAGE = 'SET_ROWS_PER_PAGE'
+export const RESET_BOOKS_LOADED_STATUS = 'RESET_BOOKS_LOADED_STATUS'
+
 // Categories
 
 export type CategoryType = {
@@ -32,6 +36,21 @@ export type CategoryType = {
 }
 export type CategoriesPropType = {
   categories: CategoryType[]
+}
+
+// Authors
+
+export type AuthorType = {
+  _id: string
+  firstName: string
+  lastName: string
+  birthYear?: number
+  biography?: string
+  books?: string[]
+}
+
+export type AuthorsPropType = {
+  authors: AuthorType[]
 }
 
 // Books
@@ -45,7 +64,7 @@ export type BookType = {
   category: string
   description: string
   publisher: string
-  authors: string[]
+  authors: AuthorType[]
   publishedYear: number
   numPage: number
   status: StatusType
@@ -71,6 +90,7 @@ export type BooksActions =
   | LoadBooksCountRequestAction
   | LoadBooksCountSuccessAction
   | LoadBooksCountFailureAction
+  | ResetBooksLoadedStatusAction
 
 export type CategoriesActions =
   | LoadCategoriesRequestAction
@@ -82,6 +102,12 @@ export type UiActions =
   | SetSearchValueAction
   | SetStatusFiltersAction
   | SetCategoryFiltersAction
+  | SetPageAction
+  | SetRowsPerPageAction
+
+export type ResetBooksLoadedStatusAction = {
+  type: typeof RESET_BOOKS_LOADED_STATUS
+}
 
 export type LoadCategoriesRequestAction = {
   type: typeof LOAD_CATEGORIES_REQUEST
@@ -159,6 +185,20 @@ export type SetCategoryFiltersAction = {
   }
 }
 
+export type SetPageAction = {
+  type: typeof SET_PAGE
+  payload: {
+    page: number
+  }
+}
+
+export type SetRowsPerPageAction = {
+  type: typeof SET_ROWS_PER_PAGE
+  payload: {
+    rowsPerPage: number
+  }
+}
+
 // State
 export type BooksState = {
   books: BookType[]
@@ -183,6 +223,8 @@ export type UiState = {
   searchValue: string
   statusFilters: string[]
   categoryFilters: string[]
+  page: number
+  rowsPerPage: number
 }
 
 export type AppState = {

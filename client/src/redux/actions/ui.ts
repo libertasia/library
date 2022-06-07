@@ -1,9 +1,13 @@
 import {
   SetCategoryFiltersAction,
+  SetPageAction,
+  SetRowsPerPageAction,
   SetSearchTypeAction,
   SetSearchValueAction,
   SetStatusFiltersAction,
   SET_CATEGORY_FILTERS,
+  SET_PAGE,
+  SET_ROWS_PER_PAGE,
   SET_SEARCH_TYPE,
   SET_SEARCH_VALUE,
   SET_STATUS_FILTERS,
@@ -45,6 +49,24 @@ export function setCategoryFilters(
     type: SET_CATEGORY_FILTERS,
     payload: {
       categoryFilters,
+    },
+  }
+}
+
+export function setPage(page: number): SetPageAction {
+  return {
+    type: SET_PAGE,
+    payload: {
+      page,
+    },
+  }
+}
+
+export function setRowsPerPage(rowsPerPage: number): SetRowsPerPageAction {
+  return {
+    type: SET_ROWS_PER_PAGE,
+    payload: {
+      rowsPerPage,
     },
   }
 }

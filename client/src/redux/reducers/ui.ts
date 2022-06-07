@@ -1,5 +1,7 @@
 import {
   SET_CATEGORY_FILTERS,
+  SET_PAGE,
+  SET_ROWS_PER_PAGE,
   SET_SEARCH_TYPE,
   SET_SEARCH_VALUE,
   SET_STATUS_FILTERS,
@@ -12,6 +14,8 @@ const initialState: UiState = {
   searchValue: '',
   statusFilters: [],
   categoryFilters: [],
+  page: 0,
+  rowsPerPage: 10,
 }
 
 export function uiReducer(state = initialState, action: UiActions) {
@@ -35,6 +39,16 @@ export function uiReducer(state = initialState, action: UiActions) {
     return {
       ...state,
       categoryFilters: action.payload.categoryFilters,
+    }
+  case SET_PAGE:
+    return {
+      ...state,
+      page: action.payload.page,
+    }
+  case SET_ROWS_PER_PAGE:
+    return {
+      ...state,
+      rowsPerPage: action.payload.rowsPerPage,
     }
   default:
     return state

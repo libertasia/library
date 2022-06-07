@@ -19,13 +19,13 @@ const findAllPaginated = async (
   pageNum: string,
   perPageCount: string
 ): Promise<BookDocument[]> => {
-  const page = parseInt(pageNum) || 1
+  const page = parseInt(pageNum) || 0
   const perPage = parseInt(perPageCount) || 10
   return Book.find()
     .populate('authors', 'firstName lastName')
     .populate('category')
     .limit(perPage)
-    .skip(perPage * (page - 1))
+    .skip(perPage * page)
     .sort({ title: 1, publishedYear: -1 })
 }
 

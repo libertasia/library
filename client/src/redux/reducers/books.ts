@@ -7,6 +7,7 @@ import {
   LOAD_BOOKS_COUNT_SUCCESS,
   LOAD_BOOKS_COUNT_REQUEST,
   LOAD_BOOKS_COUNT_FAILURE,
+  RESET_BOOKS_LOADED_STATUS,
 } from '../../types'
 
 const initialState: BooksState = {
@@ -22,6 +23,11 @@ const initialState: BooksState = {
 
 export function booksReducer(state = initialState, action: BooksActions) {
   switch (action.type) {
+  case RESET_BOOKS_LOADED_STATUS:
+    return {
+      ...state,
+      isBooksLoaded: false,
+    }
   case LOAD_BOOKS_REQUEST:
     return {
       ...state,

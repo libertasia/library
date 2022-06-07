@@ -39,7 +39,7 @@ export const getBookCount = async (
   }
 }
 
-// GET /books/search?title=a
+// GET /books/search?title=&author=&isbn=&statuses=available,borrowed&categories=biography,biology
 export const findBooks = async (
   req: Request,
   res: Response,
