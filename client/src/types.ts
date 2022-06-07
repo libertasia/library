@@ -22,6 +22,7 @@ export const LOAD_CATEGORIES_FAILURE = 'LOAD_CATEGORIES_FAILURE'
 export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE'
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE'
 export const SET_STATUS_FILTERS = 'SET_STATUS_FILTERS'
+export const SET_CATEGORY_FILTERS = 'SET_CATEGORY_FILTERS'
 
 // Categories
 
@@ -80,6 +81,7 @@ export type UiActions =
   | SetSearchTypeAction
   | SetSearchValueAction
   | SetStatusFiltersAction
+  | SetCategoryFiltersAction
 
 export type LoadCategoriesRequestAction = {
   type: typeof LOAD_CATEGORIES_REQUEST
@@ -147,6 +149,13 @@ export type SetStatusFiltersAction = {
   type: typeof SET_STATUS_FILTERS
   payload: {
     statusFilters: string[]
+  }
+}
+
+export type SetCategoryFiltersAction = {
+  type: typeof SET_CATEGORY_FILTERS
+  payload: {
+    categoryFilters: string[]
   }
 }
 

@@ -1,7 +1,9 @@
 import {
+  SetCategoryFiltersAction,
   SetSearchTypeAction,
   SetSearchValueAction,
   SetStatusFiltersAction,
+  SET_CATEGORY_FILTERS,
   SET_SEARCH_TYPE,
   SET_SEARCH_VALUE,
   SET_STATUS_FILTERS,
@@ -32,6 +34,17 @@ export function setStatusFilters(
     type: SET_STATUS_FILTERS,
     payload: {
       statusFilters,
+    },
+  }
+}
+
+export function setCategoryFilters(
+  categoryFilters: string[]
+): SetCategoryFiltersAction {
+  return {
+    type: SET_CATEGORY_FILTERS,
+    payload: {
+      categoryFilters,
     },
   }
 }

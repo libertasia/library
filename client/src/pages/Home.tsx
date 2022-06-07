@@ -1,6 +1,9 @@
 // import { filter } from 'lodash';
 // import { sentenceCase } from 'change-case';
-// import { useState } from 'react'
+import { useEffect } from 'react'
+import { Action } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
 // material
 import {
@@ -23,6 +26,8 @@ import {
 // import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify'
 import BooksTableToolbar from '../components/BooksTableToolbar'
+import { getCategories } from '../redux/actions'
+import { AppState, CategoriesState } from '../types'
 // import SearchNotFound from '../components/SearchNotFound';
 // import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
@@ -71,15 +76,24 @@ import BooksTableToolbar from '../components/BooksTableToolbar'
 // }
 
 export default function Home() {
+  const dispatch = useDispatch()
+  const { categories, isCategoriesLoaded } = useSelector(
+    (state: AppState) => state.categories
+  )
+
+  useEffect(() => {
+    if (!isCategoriesLoaded) {
+      ;(dispatch as ThunkDispatch<CategoriesState, void, Action>)(
+        getCategories()
+      )
+    }
+  }, [dispatch, isCategoriesLoaded])
+
   // const [page, setPage] = useState(0);
 
   // const [order, setOrder] = useState('asc');
 
-  // const [selected, setSelected] = useState([]);
-
   // const [orderBy, setOrderBy] = useState('name');
-
-  // const [filterName, setFilterName] = useState('');
 
   // const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -122,10 +136,6 @@ export default function Home() {
   //   setPage(0);
   // };
 
-  // const handleFilterByName = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-  //   setFilterName(event.target.value);
-  // };
-
   // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
   // const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
@@ -154,8 +164,7 @@ export default function Home() {
       </Stack>
 
       <Card>
-        <BooksTableToolbar />
-        {/* <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} /> */}
+        <BooksTableToolbar categories={categories} />
 
         {/* <Scrollbar>
           <TableContainer sx={{ minWidth: 800 }}>

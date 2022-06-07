@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { styled } from '@mui/material/styles'
 import { Toolbar, OutlinedInput, InputAdornment } from '@mui/material'
@@ -10,14 +10,15 @@ import FormControl from '@mui/material/FormControl'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-// import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material'
 
 import Iconify from '../Iconify'
 import {
   setSearchValue,
   setSearchType,
   setStatusFilters,
+  setCategoryFilters,
 } from '../../redux/actions'
+import { CategoriesPropType } from '../../types'
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +74,7 @@ const searchSelectValues = [
   },
 ]
 
-export default function BooksTableToolbar() {
+export default function BooksTableToolbar({ categories }: CategoriesPropType) {
   const dispatch = useDispatch()
 
   const [searchType, setSearchTypeState] = useState('title')
@@ -84,6 +85,29 @@ export default function BooksTableToolbar() {
   }
   const [filterStatuses, setFilterStatuses] = useState(statusesInitialState)
   const { AVAILABLE, BORROWED } = filterStatuses
+
+  const categoriesObject = categories?.reduce(
+    (acc, cur) => ({ ...acc, [cur.title]: false }),
+    {}
+  )
+  const categoriesInitialState: { [key: string]: boolean } = {
+    ...categoriesObject,
+  }
+
+  const [filterCategories, setFilterCategories] = useState(
+    categoriesInitialState
+  )
+
+  useEffect(() => {
+    const categoriesObject1 = categories?.reduce(
+      (acc, cur) => ({ ...acc, [cur.title]: false }),
+      {}
+    )
+    const categoriesInitialState1: { [key: string]: boolean } = {
+      ...categoriesObject1,
+    }
+    setFilterCategories(categoriesInitialState1)
+  }, [categories])
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchType(event.target.value))
@@ -109,19 +133,20 @@ export default function BooksTableToolbar() {
     dispatch(setStatusFilters(statuses))
   }
 
-  return (
-    <RootStyle
-    // sx={{
-    //   color: 'primary.main',
-    //   bgcolor: 'primary.lighter',
-    // }}
-    >
-      {/* {numSelected > 0 ? (
-        <Typography component="div" variant="subtitle1">
-          {numSelected} selected
-        </Typography>
-      ) : ( */}
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newCategoryState = {
+      ...filterCategories,
+      [event.target.name]: event.target.checked,
+    }
+    setFilterCategories(newCategoryState)
+    const newCategories = Object.keys(newCategoryState).filter(
+      (category) => newCategoryState[category]
+    )
+    dispatch(setCategoryFilters(newCategories))
+  }
 
+  return (
+    <RootStyle>
       <SelectStyle
         id="select-search-by"
         select
@@ -152,9 +177,15 @@ export default function BooksTableToolbar() {
       />
 
       <Box sx={{ display: 'flex', width: '100%' }}>
-        <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
+        <FormControl
+          sx={{ m: 1, display: 'flex', width: '100%', flexWrap: 'wrap' }}
+          component="fieldset"
+          variant="standard"
+        >
           <FormLabel component="legend">Status</FormLabel>
-          <FormGroup>
+          <FormGroup
+            sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
+          >
             <FormControlLabel
               control={
                 <Checkbox
@@ -178,6 +209,35 @@ export default function BooksTableToolbar() {
           </FormGroup>
         </FormControl>
       </Box>
+
+      {filterCategories && Object.keys(filterCategories).length > 0 && (
+        <Box sx={{ display: 'flex', width: '100%' }}>
+          <FormControl
+            sx={{ m: 1, display: 'flex', width: '100%', flexWrap: 'wrap' }}
+            component="fieldset"
+            variant="standard"
+          >
+            <FormLabel component="legend">Category</FormLabel>
+            <FormGroup
+              sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
+            >
+              {Object.entries(filterCategories).map((value) => (
+                <FormControlLabel
+                  key={value[0]}
+                  control={
+                    <Checkbox
+                      checked={value[1]}
+                      onChange={handleCategoryChange}
+                      name={value[0]}
+                    />
+                  }
+                  label={value[0]}
+                />
+              ))}
+            </FormGroup>
+          </FormControl>
+        </Box>
+      )}
     </RootStyle>
   )
 }

@@ -1,4 +1,5 @@
 import {
+  SET_CATEGORY_FILTERS,
   SET_SEARCH_TYPE,
   SET_SEARCH_VALUE,
   SET_STATUS_FILTERS,
@@ -29,6 +30,11 @@ export function uiReducer(state = initialState, action: UiActions) {
     return {
       ...state,
       statusFilters: action.payload.statusFilters,
+    }
+  case SET_CATEGORY_FILTERS:
+    return {
+      ...state,
+      categoryFilters: action.payload.categoryFilters,
     }
   default:
     return state
