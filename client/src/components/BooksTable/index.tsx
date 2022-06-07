@@ -1,5 +1,5 @@
 import { sentenceCase } from 'change-case'
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   Table,
@@ -29,8 +29,9 @@ import {
 
 const TABLE_HEAD = [
   { id: 'title', label: 'Title', alignRight: false },
-  { id: 'publisher', label: 'Publisher', alignRight: false },
+  { id: 'isbn', label: 'ISBN', alignRight: false },
   { id: 'authors', label: 'Authors', alignRight: false },
+  { id: 'category', label: 'Category', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: 'btn' },
   { id: 'userbtn' },
@@ -49,14 +50,11 @@ export default function BooksTable({
 }: BooksTablePropType) {
   const dispatch = useDispatch()
 
-  const { searchValue } = useSelector((state: AppState) => state.ui)
-
-  const [page, setPageInState] = useState(0)
-
-  const [rowsPerPage, setRowsPerPageInState] = useState(10)
+  const { searchValue, page, rowsPerPage } = useSelector(
+    (state: AppState) => state.ui
+  )
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPageInState(newPage)
     dispatch(setPage(newPage))
     dispatch(resetBooksLoadedStatus())
   }
@@ -64,8 +62,6 @@ export default function BooksTable({
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPageInState(parseInt(event.target.value, 10))
-    setPageInState(0)
     dispatch(setPage(0))
     dispatch(setRowsPerPage(parseInt(event.target.value, 10)))
     dispatch(resetBooksLoadedStatus())
@@ -95,8 +91,7 @@ export default function BooksTable({
 
           <TableBody>
             {books.map((row) => {
-              const { _id, title, publisher, publishedYear, status, authors } =
-                row
+              const { _id, title, isbn, category, status, authors } = row
 
               return (
                 <TableRow hover key={_id} tabIndex={-1}>
@@ -105,9 +100,7 @@ export default function BooksTable({
                       {title}
                     </Typography>
                   </TableCell>
-                  <TableCell align="left">
-                    {publisher}, {publishedYear}
-                  </TableCell>
+                  <TableCell align="left">{isbn}</TableCell>
                   <TableCell align="left">
                     <List>
                       {authors ? (
@@ -121,6 +114,7 @@ export default function BooksTable({
                       )}
                     </List>
                   </TableCell>
+                  <TableCell align="left">{category.title}</TableCell>
                   <TableCell align="left">
                     <Label
                       variant="ghost"

@@ -39,14 +39,14 @@ export const getBookCount = async (
   }
 }
 
-// GET /books/search?title=&author=&isbn=&statuses=available,borrowed&categories=biography,biology
+// GET /books/search?title=&author=&isbn=&status=available,borrowed&category=biography,biology
 export const findBooks = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { title, isbn, author, status, category } = req.query as {
+    const { title, isbn, author, status, category, page, perPage } = req.query as {
       [key: string]: string
     }
     let categories: string[] = []
@@ -58,7 +58,7 @@ export const findBooks = async (
       statuses = status.split(',')
     }
     res.json(
-      await BookService.findByQuery(title, author, isbn, statuses, categories)
+      await BookService.findByQuery(title, author, isbn, statuses, categories, page, perPage)
     )
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {

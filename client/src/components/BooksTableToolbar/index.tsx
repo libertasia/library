@@ -17,6 +17,8 @@ import {
   setSearchType,
   setStatusFilters,
   setCategoryFilters,
+  setPage,
+  resetBooksLoadedStatus,
 } from '../../redux/actions'
 import { CategoriesPropType } from '../../types'
 
@@ -112,6 +114,8 @@ export default function BooksTableToolbar({ categories }: CategoriesPropType) {
   const handleSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchType(event.target.value))
     setSearchTypeState(event.target.value)
+    dispatch(setPage(0))
+    dispatch(resetBooksLoadedStatus())
   }
 
   function handleInputChange(
@@ -119,6 +123,8 @@ export default function BooksTableToolbar({ categories }: CategoriesPropType) {
   ) {
     dispatch(setSearchValue(event.target.value))
     setSearchValueState(event.target.value)
+    dispatch(setPage(0))
+    dispatch(resetBooksLoadedStatus())
   }
 
   const handleStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,6 +137,8 @@ export default function BooksTableToolbar({ categories }: CategoriesPropType) {
       (status) => newStatusState[status]
     )
     dispatch(setStatusFilters(statuses))
+    dispatch(setPage(0))
+    dispatch(resetBooksLoadedStatus())
   }
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,6 +151,8 @@ export default function BooksTableToolbar({ categories }: CategoriesPropType) {
       (category) => newCategoryState[category]
     )
     dispatch(setCategoryFilters(newCategories))
+    dispatch(setPage(0))
+    dispatch(resetBooksLoadedStatus())
   }
 
   return (

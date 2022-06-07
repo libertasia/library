@@ -21,18 +21,42 @@ export default function Home() {
     (state: AppState) => state.categories
   )
 
-  const { page, rowsPerPage } = useSelector((state: AppState) => state.ui)
-
   const { booksCount, isBooksCountLoaded, books, isBooksLoaded } = useSelector(
     (state: AppState) => state.booksData
   )
+
+  const {
+    searchType,
+    searchValue,
+    statusFilters,
+    categoryFilters,
+    page,
+    rowsPerPage,
+  } = useSelector((state: AppState) => state.ui)
+
   useEffect(() => {
     if (!isBooksLoaded) {
       ;(dispatch as ThunkDispatch<BooksState, void, Action>)(
-        getBooksPaginated(page, rowsPerPage)
+        getBooksPaginated(
+          page,
+          rowsPerPage,
+          searchType,
+          searchValue,
+          statusFilters,
+          categoryFilters
+        )
       )
     }
-  }, [dispatch, isBooksLoaded, page, rowsPerPage])
+  }, [
+    dispatch,
+    isBooksLoaded,
+    page,
+    rowsPerPage,
+    searchType,
+    searchValue,
+    statusFilters,
+    categoryFilters,
+  ])
 
   useEffect(() => {
     if (!isCategoriesLoaded) {

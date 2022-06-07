@@ -1,3 +1,5 @@
+import { Query } from 'mongoose'
+
 import Book, { BookDocument, Status } from '../models/Book'
 import User from '../models/User'
 import Author from '../models/Author'
@@ -81,13 +83,21 @@ const findByAuthor = async (authorQuery: string): Promise<BookDocument[]> => {
   return foundBooks
 }
 
+export type BookFindByQueryPromiseType = {
+  books: BookDocument[],
+  totalCount: number
+}
+
 const findByQuery = async (
   title: string,
   author: string,
   isbn: string,
   statuses: string[],
-  categories: string[]
-): Promise<BookDocument[]> => {
+  categories: string[],
+  page: string,
+  perPage: string
+): Promise<BookFindByQueryPromiseType> => {
+
   let query = Book.find()
   let titleQuery = {}
   let authorQuery = {}
@@ -138,10 +148,19 @@ const findByQuery = async (
     query = query.and(andArray)
   }
 
+  const pageNum = parseInt(page) || 0
+  const perPageCount = parseInt(perPage) || 10
+
+  const foundBooksCount = await Book.countDocuments(query.getQuery())
+
   const foundBooks = await query
     .populate('authors', 'firstName lastName')
     .populate('category')
-  return foundBooks
+    .limit(perPageCount)
+    .skip(perPageCount * pageNum)
+    .sort({ title: 1, publishedYear: -1 })
+
+  return { books: foundBooks, totalCount: foundBooksCount }
 }
 
 const borrowBook = async (

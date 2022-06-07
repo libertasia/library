@@ -78,15 +78,25 @@ export function loadBooksCountFailure(
   }
 }
 
-export function getBooksPaginated(page?: number, perPage?: number) {
+export function getBooksPaginated(
+  page?: number,
+  perPage?: number,
+  searchType?: string,
+  searchValue?: string,
+  statusFilters?: string[],
+  categoryFilters?: string[]
+) {
   return async function (dispatch: ThunkDispatch<BooksState, void, Action>) {
     dispatch(loadBooksRequest())
     try {
+      const statusQuery = statusFilters?.join()
+      const categoryQuery = categoryFilters?.join()
       const res = await axios.get(
-        `http://localhost:5000/api/v1/books?page=${page}&perPage=${perPage}`
+        `http://localhost:5000/api/v1/books/search?page=${page}&perPage=${perPage}&${searchType}=${searchValue}&status=${statusQuery}&category=${categoryQuery}`
       )
-      const booksData = res.data
-      dispatch(loadBooksSuccess(booksData))
+      const responseData = res.data
+      dispatch(loadBooksSuccess(responseData.books))
+      dispatch(loadBooksCountSuccess(responseData.totalCount))
     } catch (error: any) {
       if (error.response.status === 404) {
         dispatch(loadBooksFailure('Resourse is not found'))

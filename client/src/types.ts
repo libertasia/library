@@ -61,7 +61,7 @@ export type BookType = {
   _id: string
   isbn: string
   title: string
-  category: string
+  category: CategoryType
   description: string
   publisher: string
   authors: AuthorType[]
