@@ -17,7 +17,7 @@ import {
 import Label from '../Label'
 //import Scrollbar from '../Scrollbar'
 import SearchNotFound from '../SearchNotFound'
-import BookMoreMenu from '../BookMoreMenu'
+import MoreMenu from '../MoreMenu'
 import { AppState, BookType } from '../../types'
 import {
   resetBooksLoadedStatus,
@@ -125,7 +125,7 @@ export default function BooksTable({
                   </TableCell>
 
                   <TableCell align="right">
-                    <BookMoreMenu />
+                    <MoreMenu />
                   </TableCell>
                 </TableRow>
               )

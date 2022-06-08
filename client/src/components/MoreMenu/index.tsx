@@ -12,7 +12,7 @@ import Iconify from '../Iconify'
 
 // ----------------------------------------------------------------------
 
-export default function BookMoreMenu() {
+export default function MoreMenu() {
   const ref = useRef(null)
   const [isOpen, setIsOpen] = useState(false)
 

@@ -1,18 +1,10 @@
-// import React from 'react'
-// import { Routes, Route } from 'react-router-dom'
 import { Navigate, useRoutes } from 'react-router-dom'
-// layouts
+
 import DashboardLayout from './layouts/DashboardLayout'
 import Home from './pages/Home'
+import Authors from './pages/Authors'
 import Login from './pages/Login'
 import Page404 from './pages/Page404'
-
-// const AppRoutes = () => (
-//   <Routes>
-//     <Route path="/" element={<Home />} />
-//     <Route path="*" element={<Page404 />} />
-//   </Routes>
-// )
 
 export default function AppRoutes() {
   return useRoutes([
@@ -23,23 +15,9 @@ export default function AppRoutes() {
       children: [
         { path: 'books', element: <Home /> },
         { path: 'login', element: <Login /> },
-        // { path: 'products', element: <Products /> },
-        // { path: 'blog', element: <Blog /> },
+        { path: 'authors', element: <Authors /> },
       ],
     },
-    // {
-    //   path: '/',
-    //   element: <LogoOnlyLayout />,
-    //   children: [
-    //     { path: '/', element: <Navigate to="/dashboard/app" /> },
-    //     { path: 'login', element: <Login /> },
-    //     { path: 'register', element: <Register /> },
-    //     { path: '404', element: <NotFound /> },
-    //     { path: '*', element: <Navigate to="/404" /> },
-    //   ],
-    // },
     { path: '*', element: <Page404 /> },
   ])
 }
-
-// export default AppRoutes

@@ -19,6 +19,10 @@ export const LOAD_CATEGORIES_REQUEST = 'LOAD_CATEGORIES_REQUEST'
 export const LOAD_CATEGORIES_SUCCESS = 'LOAD_CATEGORIES_SUCCESS'
 export const LOAD_CATEGORIES_FAILURE = 'LOAD_CATEGORIES_FAILURE'
 
+export const LOAD_AUTHORS_REQUEST = 'LOAD_AUTHORS_REQUEST'
+export const LOAD_AUTHORS_SUCCESS = 'LOAD_AUTHORS_SUCCESS'
+export const LOAD_AUTHORS_FAILURE = 'LOAD_AUTHORS_FAILURE'
+
 export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE'
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE'
 export const SET_STATUS_FILTERS = 'SET_STATUS_FILTERS'
@@ -46,7 +50,11 @@ export type AuthorType = {
   lastName: string
   birthYear?: number
   biography?: string
-  books?: string[]
+  books?: BookType[]
+}
+
+export type AuthorPropType = {
+  author: AuthorType
 }
 
 export type AuthorsPropType = {
@@ -96,6 +104,11 @@ export type CategoriesActions =
   | LoadCategoriesRequestAction
   | LoadCategoriesSuccessAction
   | LoadCategoriesFailureAction
+
+export type AuthorsActions =
+  | LoadAuthorsRequestAction
+  | LoadAuthorsSuccessAction
+  | LoadAuthorsFailureAction
 
 export type UiActions =
   | SetSearchTypeAction
@@ -152,6 +165,22 @@ export type LoadBooksCountSuccessAction = {
 
 export type LoadBooksCountFailureAction = {
   type: typeof LOAD_BOOKS_COUNT_FAILURE
+  payload: {
+    msg: string
+  }
+}
+
+export type LoadAuthorsRequestAction = {
+  type: typeof LOAD_AUTHORS_REQUEST
+}
+
+export type LoadAuthorsSuccessAction = {
+  type: typeof LOAD_AUTHORS_SUCCESS
+  payload: AuthorsPropType
+}
+
+export type LoadAuthorsFailureAction = {
+  type: typeof LOAD_AUTHORS_FAILURE
   payload: {
     msg: string
   }
@@ -218,6 +247,13 @@ export type CategoriesState = {
   error: string
 }
 
+export type AuthorsState = {
+  authors: AuthorType[]
+  isAuthorsLoaded: boolean
+  isLoading: boolean
+  error: string
+}
+
 export type UiState = {
   searchType: string
   searchValue: string
@@ -230,5 +266,6 @@ export type UiState = {
 export type AppState = {
   booksData: BooksState
   categories: CategoriesState
+  authors: AuthorsState
   ui: UiState
 }

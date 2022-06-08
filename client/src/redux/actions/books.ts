@@ -19,7 +19,6 @@ import {
   BooksPropType,
   ResetBooksLoadedStatusAction,
   RESET_BOOKS_LOADED_STATUS,
-  //BookType,
 } from '../../types'
 
 export function resetBooksLoadedStatus(): ResetBooksLoadedStatusAction {

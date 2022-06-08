@@ -2,7 +2,9 @@ import Author, { AuthorDocument } from '../models/Author'
 import { ExpectationFailedError, NotFoundError } from '../helpers/apiError'
 
 const findAll = async (): Promise<AuthorDocument[]> => {
-  return Author.find().sort({ firstName: 1 })
+  return Author.find()
+  .populate('books', 'title publishedYear')
+  .sort({ firstName: 1 })
 }
 
 const createAuthor = async (
