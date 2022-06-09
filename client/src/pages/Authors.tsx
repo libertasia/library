@@ -23,8 +23,6 @@ export default function Authors() {
     }
   }, [dispatch, isAuthorsLoaded])
 
-  console.log(authors)
-
   return (
     <Container>
       <Stack

@@ -4,11 +4,17 @@ import {
   LOAD_AUTHORS_REQUEST,
   LOAD_AUTHORS_SUCCESS,
   LOAD_AUTHORS_FAILURE,
+  ADD_AUTHOR_FAILURE,
+  ADD_AUTHOR_REQUEST,
+  ADD_AUTHOR_SUCCESS,
+  RESET_AUTHORS_FORM_SNACKBAR,
 } from '../../types'
 
 const initialState: AuthorsState = {
   authors: [],
+  author: [],
   isAuthorsLoaded: false,
+  isAuthorAdded: false,
   isLoading: false,
   error: '',
 }
@@ -32,6 +38,34 @@ export function authorsReducer(state = initialState, action: AuthorsActions) {
       ...state,
       isLoading: false,
       error: action.payload.msg,
+    }
+  case ADD_AUTHOR_REQUEST:
+    return {
+      ...state,
+      isAuthorAdded: false,
+      isLoading: true,
+      error: '',
+    }
+  case ADD_AUTHOR_SUCCESS:
+    return {
+      ...state,
+      author: action.payload,
+      isLoading: false,
+      isAuthorAdded: true,
+      isAuthorsLoaded: false,
+      error: '',
+    }
+  case ADD_AUTHOR_FAILURE:
+    return {
+      ...state,
+      error: action.payload.msg,
+      isLoading: false,
+    }
+  case RESET_AUTHORS_FORM_SNACKBAR:
+    return {
+      ...state,
+      error: '',
+      isAuthorAdded: false,
     }
   default:
     return state

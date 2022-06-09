@@ -23,6 +23,10 @@ export const LOAD_AUTHORS_REQUEST = 'LOAD_AUTHORS_REQUEST'
 export const LOAD_AUTHORS_SUCCESS = 'LOAD_AUTHORS_SUCCESS'
 export const LOAD_AUTHORS_FAILURE = 'LOAD_AUTHORS_FAILURE'
 
+export const ADD_AUTHOR_REQUEST = 'ADD_AUTHOR_REQUEST'
+export const ADD_AUTHOR_SUCCESS = 'ADD_AUTHOR_SUCCESS'
+export const ADD_AUTHOR_FAILURE = 'ADD_AUTHOR_FAILURE'
+
 export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE'
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE'
 export const SET_STATUS_FILTERS = 'SET_STATUS_FILTERS'
@@ -32,6 +36,8 @@ export const SET_AUTHORS_FILTER_VALUE = 'SET_AUTHORS_FILTER_VALUE'
 export const SET_PAGE = 'SET_PAGE'
 export const SET_ROWS_PER_PAGE = 'SET_ROWS_PER_PAGE'
 export const RESET_BOOKS_LOADED_STATUS = 'RESET_BOOKS_LOADED_STATUS'
+
+export const RESET_AUTHORS_FORM_SNACKBAR = 'RESET_AUTHORS_ERROR'
 
 // Categories
 
@@ -110,6 +116,10 @@ export type AuthorsActions =
   | LoadAuthorsRequestAction
   | LoadAuthorsSuccessAction
   | LoadAuthorsFailureAction
+  | AddAuthorRequestAction
+  | AddAuthorSuccessAction
+  | AddAuthorFailureAction
+  | ResetAuthorsFormSnackbarAction
 
 export type UiActions =
   | SetSearchTypeAction
@@ -237,6 +247,26 @@ export type SetAuthorsFilterValueAction = {
   }
 }
 
+export type AddAuthorRequestAction = {
+  type: typeof ADD_AUTHOR_REQUEST
+}
+
+export type AddAuthorSuccessAction = {
+  type: typeof ADD_AUTHOR_SUCCESS
+  payload: AuthorPropType
+}
+
+export type AddAuthorFailureAction = {
+  type: typeof ADD_AUTHOR_FAILURE
+  payload: {
+    msg: string
+  }
+}
+
+export type ResetAuthorsFormSnackbarAction = {
+  type: typeof RESET_AUTHORS_FORM_SNACKBAR
+}
+
 // State
 export type BooksState = {
   books: BookType[]
@@ -258,7 +288,9 @@ export type CategoriesState = {
 
 export type AuthorsState = {
   authors: AuthorType[]
+  author: AuthorType[]
   isAuthorsLoaded: boolean
+  isAuthorAdded: boolean
   isLoading: boolean
   error: string
 }

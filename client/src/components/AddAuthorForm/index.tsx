@@ -1,13 +1,43 @@
 import * as Yup from 'yup'
 import { useFormik, Form, FormikProvider } from 'formik'
-import { useNavigate } from 'react-router-dom'
+import { Action } from 'redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
 import { Stack, TextField } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
+import Alert from '@mui/material/Alert'
+import Snackbar from '@mui/material/Snackbar'
+
+import { AuthorsState, AppState } from '../../types'
+import { addNewAuthor, resetAutorsError } from '../../redux/actions'
 
 // ----------------------------------------------------------------------
 
 export default function AddAuthorForm() {
-  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const [isErrorVisible, setIsErrorVisible] = useState(false)
+  const [isSuccessVisible, setIsSuccessVisible] = useState(false)
+
+  const { isAuthorAdded, error } = useSelector(
+    (state: AppState) => state.authors
+  )
+
+  useEffect(() => {
+    if (error) {
+      setIsErrorVisible(true)
+    }
+    if (isAuthorAdded) {
+      setIsSuccessVisible(true)
+    }
+  }, [error, isAuthorAdded])
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetAutorsError())
+    }
+  }, [])
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -36,16 +66,66 @@ export default function AddAuthorForm() {
       biography: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard/authors', { replace: true })
+    onSubmit: (initialValues, { setSubmitting, resetForm }) => {
+      console.log(initialValues)
+      setIsErrorVisible(false)
+      ;(dispatch as ThunkDispatch<AuthorsState, void, Action>)(
+        addNewAuthor(
+          initialValues.firstName,
+          initialValues.lastName,
+          initialValues.birthYear,
+          initialValues.biography
+        )
+      )
+      if (isAuthorAdded) {
+        setIsSuccessVisible(true)
+        //resetForm()
+      } else if (error) {
+        setIsErrorVisible(true)
+      }
+      setSubmitting(false)
     },
   })
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik
 
+  const handleSuccessSnackbarClose = () => {
+    setIsSuccessVisible(false)
+  }
+
+  const handleErrorSnackbarClose = () => {
+    setIsErrorVisible(false)
+  }
+
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+        <Snackbar
+          open={isSuccessVisible}
+          autoHideDuration={3000}
+          onClose={handleSuccessSnackbarClose}
+        >
+          <Alert
+            onClose={handleSuccessSnackbarClose}
+            sx={{ marginBottom: 2 }}
+            severity="success"
+          >
+            Author added successfully!
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={isErrorVisible}
+          autoHideDuration={3000}
+          onClose={handleErrorSnackbarClose}
+        >
+          <Alert
+            onClose={handleErrorSnackbarClose}
+            sx={{ marginBottom: 2 }}
+            severity="error"
+          >
+            Could not add author: {error}
+          </Alert>
+        </Snackbar>
         <Stack spacing={3}>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
