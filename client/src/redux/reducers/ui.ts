@@ -1,4 +1,5 @@
 import {
+  SET_AUTHORS_FILTER_VALUE,
   SET_CATEGORY_FILTERS,
   SET_PAGE,
   SET_ROWS_PER_PAGE,
@@ -16,6 +17,7 @@ const initialState: UiState = {
   categoryFilters: [],
   page: 0,
   rowsPerPage: 10,
+  authorsFilterValue: '',
 }
 
 export function uiReducer(state = initialState, action: UiActions) {
@@ -49,6 +51,11 @@ export function uiReducer(state = initialState, action: UiActions) {
     return {
       ...state,
       rowsPerPage: action.payload.rowsPerPage,
+    }
+  case SET_AUTHORS_FILTER_VALUE:
+    return {
+      ...state,
+      authorsFilterValue: action.payload.authorsFilterValue,
     }
   default:
     return state

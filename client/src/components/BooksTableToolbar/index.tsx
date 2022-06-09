@@ -44,6 +44,9 @@ const SelectStyle = styled(TextField)(({ theme }) => ({
     },
   },
   margin: theme.spacing(0, 1, 0, 0),
+  [theme.breakpoints.down('sm')]: {
+    margin: theme.spacing(0, 1, 1, 0),
+  },
 }))
 
 const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
@@ -197,6 +200,7 @@ export default function BooksTableToolbar({ categories }: CategoriesPropType) {
             sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
           >
             <FormControlLabel
+              componentsProps={{ typography: { variant: 'body2' } }}
               control={
                 <Checkbox
                   checked={AVAILABLE}
@@ -207,6 +211,7 @@ export default function BooksTableToolbar({ categories }: CategoriesPropType) {
               label="Available"
             />
             <FormControlLabel
+              componentsProps={{ typography: { variant: 'body2' } }}
               control={
                 <Checkbox
                   checked={BORROWED}
@@ -233,6 +238,7 @@ export default function BooksTableToolbar({ categories }: CategoriesPropType) {
             >
               {Object.entries(filterCategories).map((value) => (
                 <FormControlLabel
+                  componentsProps={{ typography: { variant: 'body2' } }}
                   key={value[0]}
                   control={
                     <Checkbox

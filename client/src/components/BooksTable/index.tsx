@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 
 import Label from '../Label'
-//import Scrollbar from '../Scrollbar'
+import BorrowReturnButton from '../BorrowReturnButton'
 import SearchNotFound from '../SearchNotFound'
 import MoreMenu from '../MoreMenu'
 import { AppState, BookType } from '../../types'
@@ -74,8 +74,17 @@ export default function BooksTable({
 
   return (
     <>
-      <TableContainer>
+      <TableContainer sx={{ paddingLeft: 2, paddingRight: 2 }}>
         <Table>
+          <colgroup>
+            <col width="30%" />
+            <col width="15%" />
+            <col width="20%" />
+            <col width="10%" />
+            <col width="10%" />
+            <col width="auto" />
+            <col width="auto" />
+          </colgroup>
           <TableHead>
             <TableRow>
               {TABLE_HEAD.map((headCell) => (
@@ -102,10 +111,13 @@ export default function BooksTable({
                   </TableCell>
                   <TableCell align="left">{isbn}</TableCell>
                   <TableCell align="left">
-                    <List>
+                    <List sx={{ margin: 0, padding: 0 }}>
                       {authors ? (
                         authors.map((author) => (
-                          <ListItem key={author._id}>
+                          <ListItem
+                            sx={{ margin: 0, padding: 0 }}
+                            key={author._id}
+                          >
                             {author.firstName} {author.lastName}
                           </ListItem>
                         ))
@@ -123,7 +135,13 @@ export default function BooksTable({
                       {sentenceCase(status)}
                     </Label>
                   </TableCell>
-
+                  {status === 'AVAILABLE' ? (
+                    <TableCell>
+                      <BorrowReturnButton book={row} />
+                    </TableCell>
+                  ) : (
+                    <TableCell></TableCell>
+                  )}
                   <TableCell align="right">
                     <MoreMenu />
                   </TableCell>
@@ -149,6 +167,7 @@ export default function BooksTable({
         </Table>
       </TableContainer>
       <TablePagination
+        sx={{ paddingLeft: 2, marginRight: 1 }}
         rowsPerPageOptions={[10, 25, 50]}
         component="div"
         count={totalBooksCount}

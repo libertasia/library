@@ -1,10 +1,12 @@
 import {
+  SetAuthorsFilterValueAction,
   SetCategoryFiltersAction,
   SetPageAction,
   SetRowsPerPageAction,
   SetSearchTypeAction,
   SetSearchValueAction,
   SetStatusFiltersAction,
+  SET_AUTHORS_FILTER_VALUE,
   SET_CATEGORY_FILTERS,
   SET_PAGE,
   SET_ROWS_PER_PAGE,
@@ -67,6 +69,17 @@ export function setRowsPerPage(rowsPerPage: number): SetRowsPerPageAction {
     type: SET_ROWS_PER_PAGE,
     payload: {
       rowsPerPage,
+    },
+  }
+}
+
+export function setAuthorsFilterValue(
+  authorsFilterValue: string
+): SetAuthorsFilterValueAction {
+  return {
+    type: SET_AUTHORS_FILTER_VALUE,
+    payload: {
+      authorsFilterValue,
     },
   }
 }

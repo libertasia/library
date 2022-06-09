@@ -6,8 +6,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import { Card, Stack, Button, Container, Typography } from '@mui/material'
 
 import Iconify from '../components/Iconify'
-// import BooksTableToolbar from '../components/BooksTableToolbar'
-// import BooksTable from '../components/BooksTable'
+import AuthorsToolbar from '../components/AuthorsToolbar'
 import { AppState, AuthorsState } from '../types'
 import { getAuthors } from '../redux/actions'
 import AuthorsTable from '../components/AuthorsTable'
@@ -27,7 +26,7 @@ export default function Authors() {
   console.log(authors)
 
   return (
-    <Container maxWidth="xl">
+    <Container>
       <Stack
         direction="row"
         alignItems="center"
@@ -47,9 +46,8 @@ export default function Authors() {
         </Button>
       </Stack>
 
-      {/* <BooksTableToolbar categories={categories} />
+      <AuthorsToolbar />
 
-      <BooksTable books={books} totalBooksCount={booksCount} /> */}
       <Card>
         <AuthorsTable authors={authors} />
       </Card>

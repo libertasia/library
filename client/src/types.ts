@@ -27,6 +27,7 @@ export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE'
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE'
 export const SET_STATUS_FILTERS = 'SET_STATUS_FILTERS'
 export const SET_CATEGORY_FILTERS = 'SET_CATEGORY_FILTERS'
+export const SET_AUTHORS_FILTER_VALUE = 'SET_AUTHORS_FILTER_VALUE'
 
 export const SET_PAGE = 'SET_PAGE'
 export const SET_ROWS_PER_PAGE = 'SET_ROWS_PER_PAGE'
@@ -117,6 +118,7 @@ export type UiActions =
   | SetCategoryFiltersAction
   | SetPageAction
   | SetRowsPerPageAction
+  | SetAuthorsFilterValueAction
 
 export type ResetBooksLoadedStatusAction = {
   type: typeof RESET_BOOKS_LOADED_STATUS
@@ -228,6 +230,13 @@ export type SetRowsPerPageAction = {
   }
 }
 
+export type SetAuthorsFilterValueAction = {
+  type: typeof SET_AUTHORS_FILTER_VALUE
+  payload: {
+    authorsFilterValue: string
+  }
+}
+
 // State
 export type BooksState = {
   books: BookType[]
@@ -261,6 +270,7 @@ export type UiState = {
   categoryFilters: string[]
   page: number
   rowsPerPage: number
+  authorsFilterValue: string
 }
 
 export type AppState = {
