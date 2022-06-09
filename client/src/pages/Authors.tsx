@@ -39,7 +39,7 @@ export default function Authors() {
         <Button
           variant="contained"
           component={RouterLink}
-          to="#"
+          to="/dashboard/add-author"
           startIcon={<Iconify icon="eva:plus-fill" />}
         >
           New Author

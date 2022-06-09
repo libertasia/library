@@ -14,13 +14,13 @@ const authorSchema = new mongoose.Schema({
     type: String,
     index: true,
     required: true,
-    maxLength: 100,
+    maxLength: 50,
   },
   lastName: {
     type: String,
     index: true,
     required: true,
-    maxLength: 100,
+    maxLength: 50,
   },
   birthYear: {
     type: Number,
