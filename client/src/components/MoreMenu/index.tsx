@@ -12,7 +12,11 @@ import Iconify from '../Iconify'
 
 // ----------------------------------------------------------------------
 
-export default function MoreMenu() {
+export type MoreMenuPropType = {
+  onDeleteBtnClick?: () => void
+}
+
+export default function MoreMenu({ onDeleteBtnClick }: MoreMenuPropType) {
   const ref = useRef(null)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -32,7 +36,7 @@ export default function MoreMenu() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem sx={{ color: 'text.secondary' }} onClick={onDeleteBtnClick}>
           <ListItemIcon>
             <Iconify icon="eva:trash-2-outline" width={24} height={24} />
           </ListItemIcon>

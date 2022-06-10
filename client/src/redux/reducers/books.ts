@@ -12,6 +12,9 @@ import {
   ADD_BOOK_SUCCESS,
   ADD_BOOK_FAILURE,
   RESET_BOOKS_FORM_SNACKBAR,
+  DELETE_BOOK_REQUEST,
+  DELETE_BOOK_SUCCESS,
+  DELETE_BOOK_FAILURE,
 } from '../../types'
 
 const initialState: BooksState = {
@@ -24,6 +27,7 @@ const initialState: BooksState = {
   isBookAdded: false,
   isLoading: false,
   error: '',
+  successCode: 0,
 }
 
 export function booksReducer(state = initialState, action: BooksActions) {
@@ -86,6 +90,26 @@ export function booksReducer(state = initialState, action: BooksActions) {
       error: '',
     }
   case ADD_BOOK_FAILURE:
+    return {
+      ...state,
+      error: action.payload.msg,
+      isLoading: false,
+    }
+  case DELETE_BOOK_REQUEST:
+    return {
+      ...state,
+      isLoading: true,
+      error: '',
+    }
+  case DELETE_BOOK_SUCCESS:
+    return {
+      ...state,
+      successCode: action.payload,
+      isLoading: false,
+      isBooksLoaded: false,
+      error: '',
+    }
+  case DELETE_BOOK_FAILURE:
     return {
       ...state,
       error: action.payload.msg,

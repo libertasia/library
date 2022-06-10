@@ -28,6 +28,12 @@ import {
   ADD_BOOK_FAILURE,
   ResetBooksFormSnackbarAction,
   RESET_BOOKS_FORM_SNACKBAR,
+  DeleteBookRequestAction,
+  DELETE_BOOK_REQUEST,
+  DeleteBookSuccessAction,
+  DELETE_BOOK_SUCCESS,
+  DeleteBookFailureAction,
+  DELETE_BOOK_FAILURE,
 } from '../../types'
 
 export function resetBooksLoadedStatus(): ResetBooksLoadedStatusAction {
@@ -111,6 +117,28 @@ export function addBookFailure(msg: string): AddBookFailureAction {
 export function resetBooksError(): ResetBooksFormSnackbarAction {
   return {
     type: RESET_BOOKS_FORM_SNACKBAR,
+  }
+}
+
+export function deleteBookRequest(): DeleteBookRequestAction {
+  return {
+    type: DELETE_BOOK_REQUEST,
+  }
+}
+
+export function deleteBookSuccess(status: number): DeleteBookSuccessAction {
+  return {
+    type: DELETE_BOOK_SUCCESS,
+    payload: status,
+  }
+}
+
+export function deleteBookFailure(msg: string): DeleteBookFailureAction {
+  return {
+    type: DELETE_BOOK_FAILURE,
+    payload: {
+      msg,
+    },
   }
 }
 
@@ -206,25 +234,31 @@ export function addNewBook(
   }
 }
 
-// export function getCountryByName(name: any) {
-//   return async function (
-//     dispatch: ThunkDispatch<CountriesState, void, Action>
-//   ) {
-//     dispatch(loadBooksCountRequest())
-//     try {
-//       const res = await axios.get(`https://restcountries.com/v3.1/name/${name}`)
-//       const countriesData = res.data.map((obj: any) => ({
-//         ...obj,
-//         isInFavourites: false,
-//         id: obj.name.common,
-//       }))
-//       dispatch(loadBooksCountSuccess(countriesData))
-//     } catch (error: any) {
-//       if (error.response.status === 404) {
-//         dispatch(loadBooksCountFailure('Resourse is not found'))
-//         return
-//       }
-//       dispatch(loadBooksCountFailure('Something went wrong'))
-//     }
-//   }
-// }
+export function deleteBook(_id: string) {
+  return async function (dispatch: ThunkDispatch<BooksState, void, Action>) {
+    dispatch(deleteBookRequest())
+    try {
+      const res = await axios.delete(
+        `http://localhost:5000/api/v1/books/${_id}/delete`,
+        { withCredentials: true }
+      )
+      dispatch(deleteBookSuccess(res.status))
+    } catch (error: any) {
+      if (error.response.status === 404) {
+        dispatch(deleteBookFailure('Resourse is not found'))
+        return
+      }
+      if (error.response.status === 403) {
+        dispatch(
+          deleteBookFailure('You are not authorized to perform this action')
+        )
+        return
+      }
+      if (error.response.status === 417) {
+        dispatch(deleteBookFailure('Can not delete borrowed book'))
+        return
+      }
+      dispatch(deleteBookFailure(`Something went wrong: ${error}`))
+    }
+  }
+}

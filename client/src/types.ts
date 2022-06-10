@@ -31,6 +31,10 @@ export const ADD_BOOK_REQUEST = 'ADD_BOOK_REQUEST'
 export const ADD_BOOK_SUCCESS = 'ADD_BOOK_SUCCESS'
 export const ADD_BOOK_FAILURE = 'ADD_BOOK_FAILURE'
 
+export const DELETE_BOOK_REQUEST = 'DELETE_BOOK_REQUEST'
+export const DELETE_BOOK_SUCCESS = 'DELETE_BOOK_SUCCESS'
+export const DELETE_BOOK_FAILURE = 'DELETE_BOOK_FAILURE'
+
 export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE'
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE'
 export const SET_STATUS_FILTERS = 'SET_STATUS_FILTERS'
@@ -116,6 +120,9 @@ export type BooksActions =
   | AddBookSuccessAction
   | AddBookFailureAction
   | ResetBooksFormSnackbarAction
+  | DeleteBookRequestAction
+  | DeleteBookSuccessAction
+  | DeleteBookFailureAction
 
 export type CategoriesActions =
   | LoadCategoriesRequestAction
@@ -302,6 +309,22 @@ export type ResetBooksFormSnackbarAction = {
   type: typeof RESET_BOOKS_FORM_SNACKBAR
 }
 
+export type DeleteBookRequestAction = {
+  type: typeof DELETE_BOOK_REQUEST
+}
+
+export type DeleteBookSuccessAction = {
+  type: typeof DELETE_BOOK_SUCCESS
+  payload: number
+}
+
+export type DeleteBookFailureAction = {
+  type: typeof DELETE_BOOK_FAILURE
+  payload: {
+    msg: string
+  }
+}
+
 // State
 export type BooksState = {
   books: BookType[]
@@ -313,6 +336,7 @@ export type BooksState = {
   isBookAdded: boolean
   isLoading: boolean
   error: string
+  successCode: number
 }
 
 export type CategoriesState = {

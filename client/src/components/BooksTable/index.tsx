@@ -1,6 +1,10 @@
 import { sentenceCase } from 'change-case'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { Action } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 import { useDispatch, useSelector } from 'react-redux'
+import Alert from '@mui/material/Alert'
+import Snackbar from '@mui/material/Snackbar'
 import {
   Table,
   TableHead,
@@ -18,8 +22,9 @@ import Label from '../Label'
 import BorrowReturnButton from '../BorrowReturnButton'
 import SearchNotFound from '../SearchNotFound'
 import MoreMenu from '../MoreMenu'
-import { AppState, BookType } from '../../types'
+import { AppState, BooksState, BookType } from '../../types'
 import {
+  deleteBook,
   resetBooksLoadedStatus,
   setPage,
   setRowsPerPage,
@@ -54,7 +59,14 @@ export default function BooksTable({
     (state: AppState) => state.ui
   )
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const { successCode, error } = useSelector(
+    (state: AppState) => state.booksData
+  )
+
+  const [isErrorVisible, setIsErrorVisible] = useState(false)
+  const [isSuccessVisible, setIsSuccessVisible] = useState(false)
+
+  const handleChangePage = (event: any | null, newPage: number) => {
     dispatch(setPage(newPage))
     dispatch(resetBooksLoadedStatus())
   }
@@ -67,14 +79,64 @@ export default function BooksTable({
     dispatch(resetBooksLoadedStatus())
   }
 
+  const handleDeleteBook = (bookId: string) => {
+    ;(dispatch as ThunkDispatch<BooksState, void, Action>)(deleteBook(bookId))
+  }
+
+  const handleSuccessSnackbarClose = () => {
+    setIsSuccessVisible(false)
+  }
+
+  const handleErrorSnackbarClose = () => {
+    setIsErrorVisible(false)
+  }
+
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - books.length) : 0
 
   const isBooksNotFound = books.length === 0
 
+  useEffect(() => {
+    if (error) {
+      setIsErrorVisible(true)
+    }
+    console.log(successCode)
+    if (successCode === 204) {
+      setIsSuccessVisible(true)
+    }
+  }, [error, successCode])
+
   return (
     <>
       <TableContainer sx={{ paddingLeft: 2, paddingRight: 2 }}>
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={isSuccessVisible}
+          autoHideDuration={5000}
+          onClose={handleSuccessSnackbarClose}
+        >
+          <Alert
+            onClose={handleSuccessSnackbarClose}
+            sx={{ marginBottom: 2 }}
+            severity="success"
+          >
+            Book deleted successfully!
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={isErrorVisible}
+          autoHideDuration={5000}
+          onClose={handleErrorSnackbarClose}
+        >
+          <Alert
+            onClose={handleErrorSnackbarClose}
+            sx={{ marginBottom: 2 }}
+            severity="error"
+          >
+            Could not delete book: {error}
+          </Alert>
+        </Snackbar>
         <Table>
           <colgroup>
             <col width="30%" />
@@ -143,7 +205,7 @@ export default function BooksTable({
                     <TableCell></TableCell>
                   )}
                   <TableCell align="right">
-                    <MoreMenu />
+                    <MoreMenu onDeleteBtnClick={() => handleDeleteBook(_id)} />
                   </TableCell>
                 </TableRow>
               )
