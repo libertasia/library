@@ -25,6 +25,7 @@ import MoreMenu from '../MoreMenu'
 import { AppState, BooksState, BookType } from '../../types'
 import {
   deleteBook,
+  resetAutorsLoadedStatus,
   resetBooksLoadedStatus,
   setPage,
   setRowsPerPage,
@@ -100,11 +101,12 @@ export default function BooksTable({
     if (error) {
       setIsErrorVisible(true)
     }
-    console.log(successCode)
+
     if (successCode === 204) {
       setIsSuccessVisible(true)
+      dispatch(resetAutorsLoadedStatus())
     }
-  }, [error, successCode])
+  }, [dispatch, error, successCode])
 
   return (
     <>

@@ -15,6 +15,8 @@ import {
   DELETE_BOOK_REQUEST,
   DELETE_BOOK_SUCCESS,
   DELETE_BOOK_FAILURE,
+  AuthorsActions,
+  RESET_AUTHORS_LOADED_STATUS,
 } from '../../types'
 
 const initialState: BooksState = {
@@ -30,12 +32,23 @@ const initialState: BooksState = {
   successCode: 0,
 }
 
-export function booksReducer(state = initialState, action: BooksActions) {
+export function booksReducer(
+  state = initialState,
+  action: BooksActions | AuthorsActions
+) {
   switch (action.type) {
   case RESET_BOOKS_LOADED_STATUS:
     return {
       ...state,
       isBooksLoaded: false,
+      successCode: 0,
+      error: '',
+    }
+  case RESET_AUTHORS_LOADED_STATUS:
+    return {
+      ...state,
+      successCode: 0,
+      error: '',
     }
   case LOAD_BOOKS_REQUEST:
     return {

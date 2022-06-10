@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Action } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 import {
   Table,
   TableHead,
@@ -17,11 +19,19 @@ import IconButton from '@mui/material/IconButton'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import Collapse from '@mui/material/Collapse'
+import Alert from '@mui/material/Alert'
+import Snackbar from '@mui/material/Snackbar'
 
 import SearchNotFound from '../SearchNotFound'
 import MoreMenu from '../MoreMenu'
-import { AppState, AuthorPropType, AuthorsPropType } from '../../types'
+import {
+  AppState,
+  AuthorPropType,
+  AuthorsPropType,
+  AuthorsState,
+} from '../../types'
 import { getFilteredAuthors } from '../../helpers'
+import { deleteAuthor, resetBooksLoadedStatus } from '../../redux/actions'
 
 // ----------------------------------------------------------------------
 
@@ -36,8 +46,16 @@ const TABLE_HEAD = [
 // ----------------------------------------------------------------------
 
 function AuthorsTableRow({ author }: AuthorPropType) {
+  const dispatch = useDispatch()
   const [open, setOpen] = React.useState(false)
   const { _id, firstName, lastName, birthYear, biography, books } = author
+
+  const handleDeleteAuthor = (authorId: string) => {
+    ;(dispatch as ThunkDispatch<AuthorsState, void, Action>)(
+      deleteAuthor(authorId)
+    )
+  }
+
   return (
     <>
       <TableRow hover key={_id} tabIndex={-1}>
@@ -72,7 +90,7 @@ function AuthorsTableRow({ author }: AuthorPropType) {
           </List>
         </TableCell>
         <TableCell align="right">
-          <MoreMenu />
+          <MoreMenu onDeleteBtnClick={() => handleDeleteAuthor(_id)} />
         </TableCell>
       </TableRow>
       <TableRow>
@@ -92,10 +110,15 @@ function AuthorsTableRow({ author }: AuthorPropType) {
 }
 
 export default function AuthorsTable({ authors }: AuthorsPropType) {
+  const dispatch = useDispatch()
+
   const { authorsFilterValue } = useSelector((state: AppState) => state.ui)
+  const { successCode, error } = useSelector((state: AppState) => state.authors)
 
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [isErrorVisible, setIsErrorVisible] = useState(false)
+  const [isSuccessVisible, setIsSuccessVisible] = useState(false)
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
@@ -108,6 +131,14 @@ export default function AuthorsTable({ authors }: AuthorsPropType) {
     setPage(0)
   }
 
+  const handleSuccessSnackbarClose = () => {
+    setIsSuccessVisible(false)
+  }
+
+  const handleErrorSnackbarClose = () => {
+    setIsErrorVisible(false)
+  }
+
   const filteredAuthors = getFilteredAuthors(authors, authorsFilterValue)
 
   const emptyRows =
@@ -117,9 +148,48 @@ export default function AuthorsTable({ authors }: AuthorsPropType) {
 
   const isAuthorsNotFound = filteredAuthors.length === 0
 
+  useEffect(() => {
+    if (error) {
+      setIsErrorVisible(true)
+    }
+
+    if (successCode === 204) {
+      setIsSuccessVisible(true)
+      dispatch(resetBooksLoadedStatus())
+    }
+  }, [dispatch, error, successCode])
+
   return (
     <>
       <TableContainer sx={{ paddingLeft: 2, paddingRight: 2 }}>
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={isSuccessVisible}
+          autoHideDuration={5000}
+          onClose={handleSuccessSnackbarClose}
+        >
+          <Alert
+            onClose={handleSuccessSnackbarClose}
+            sx={{ marginBottom: 2 }}
+            severity="success"
+          >
+            Author deleted successfully!
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={isErrorVisible}
+          autoHideDuration={5000}
+          onClose={handleErrorSnackbarClose}
+        >
+          <Alert
+            onClose={handleErrorSnackbarClose}
+            sx={{ marginBottom: 2 }}
+            severity="error"
+          >
+            Could not delete author: {error}
+          </Alert>
+        </Snackbar>
         <Table>
           <colgroup>
             <col width="10%" />

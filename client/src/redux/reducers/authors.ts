@@ -9,6 +9,11 @@ import {
   ADD_AUTHOR_SUCCESS,
   RESET_AUTHORS_FORM_SNACKBAR,
   RESET_AUTHORS_LOADED_STATUS,
+  DELETE_AUTHOR_REQUEST,
+  DELETE_AUTHOR_SUCCESS,
+  DELETE_AUTHOR_FAILURE,
+  BooksActions,
+  RESET_BOOKS_LOADED_STATUS,
 } from '../../types'
 
 const initialState: AuthorsState = {
@@ -18,9 +23,13 @@ const initialState: AuthorsState = {
   isAuthorAdded: false,
   isLoading: false,
   error: '',
+  successCode: 0,
 }
 
-export function authorsReducer(state = initialState, action: AuthorsActions) {
+export function authorsReducer(
+  state = initialState,
+  action: AuthorsActions | BooksActions
+) {
   switch (action.type) {
   case LOAD_AUTHORS_REQUEST:
     return {
@@ -72,6 +81,34 @@ export function authorsReducer(state = initialState, action: AuthorsActions) {
     return {
       ...state,
       isAuthorsLoaded: false,
+      successCode: 0,
+      error: '',
+    }
+  case RESET_BOOKS_LOADED_STATUS:
+    return {
+      ...state,
+      successCode: 0,
+      error: '',
+    }
+  case DELETE_AUTHOR_REQUEST:
+    return {
+      ...state,
+      isLoading: true,
+      error: '',
+    }
+  case DELETE_AUTHOR_SUCCESS:
+    return {
+      ...state,
+      successCode: action.payload,
+      isLoading: false,
+      isAuthorsLoaded: false,
+      error: '',
+    }
+  case DELETE_AUTHOR_FAILURE:
+    return {
+      ...state,
+      error: action.payload.msg,
+      isLoading: false,
     }
   default:
     return state

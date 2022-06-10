@@ -35,6 +35,10 @@ export const DELETE_BOOK_REQUEST = 'DELETE_BOOK_REQUEST'
 export const DELETE_BOOK_SUCCESS = 'DELETE_BOOK_SUCCESS'
 export const DELETE_BOOK_FAILURE = 'DELETE_BOOK_FAILURE'
 
+export const DELETE_AUTHOR_REQUEST = 'DELETE_AUTHOR_REQUEST'
+export const DELETE_AUTHOR_SUCCESS = 'DELETE_AUTHOR_SUCCESS'
+export const DELETE_AUTHOR_FAILURE = 'DELETE_AUTHOR_FAILURE'
+
 export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE'
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE'
 export const SET_STATUS_FILTERS = 'SET_STATUS_FILTERS'
@@ -138,6 +142,9 @@ export type AuthorsActions =
   | AddAuthorFailureAction
   | ResetAuthorsFormSnackbarAction
   | ResetAuthorsLoadedStatusAction
+  | DeleteAuthorRequestAction
+  | DeleteAuthorSuccessAction
+  | DeleteAuthorFailureAction
 
 export type UiActions =
   | SetSearchTypeAction
@@ -325,6 +332,22 @@ export type DeleteBookFailureAction = {
   }
 }
 
+export type DeleteAuthorRequestAction = {
+  type: typeof DELETE_AUTHOR_REQUEST
+}
+
+export type DeleteAuthorSuccessAction = {
+  type: typeof DELETE_AUTHOR_SUCCESS
+  payload: number
+}
+
+export type DeleteAuthorFailureAction = {
+  type: typeof DELETE_AUTHOR_FAILURE
+  payload: {
+    msg: string
+  }
+}
+
 // State
 export type BooksState = {
   books: BookType[]
@@ -353,6 +376,7 @@ export type AuthorsState = {
   isAuthorAdded: boolean
   isLoading: boolean
   error: string
+  successCode: number
 }
 
 export type UiState = {

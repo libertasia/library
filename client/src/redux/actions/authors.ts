@@ -22,6 +22,12 @@ import {
   RESET_AUTHORS_FORM_SNACKBAR,
   ResetAuthorsLoadedStatusAction,
   RESET_AUTHORS_LOADED_STATUS,
+  DeleteAuthorRequestAction,
+  DELETE_AUTHOR_REQUEST,
+  DeleteAuthorSuccessAction,
+  DELETE_AUTHOR_SUCCESS,
+  DeleteAuthorFailureAction,
+  DELETE_AUTHOR_FAILURE,
 } from '../../types'
 
 export function loadAuthorsRequest(): LoadAuthorsRequestAction {
@@ -84,6 +90,28 @@ export function resetAutorsLoadedStatus(): ResetAuthorsLoadedStatusAction {
   }
 }
 
+export function deleteAuthorRequest(): DeleteAuthorRequestAction {
+  return {
+    type: DELETE_AUTHOR_REQUEST,
+  }
+}
+
+export function deleteAuthorSuccess(status: number): DeleteAuthorSuccessAction {
+  return {
+    type: DELETE_AUTHOR_SUCCESS,
+    payload: status,
+  }
+}
+
+export function deleteAuthorFailure(msg: string): DeleteAuthorFailureAction {
+  return {
+    type: DELETE_AUTHOR_FAILURE,
+    payload: {
+      msg,
+    },
+  }
+}
+
 // ----------------------------------------------------------------------
 
 export function getAuthors() {
@@ -129,6 +157,35 @@ export function addNewAuthor(
         return
       }
       dispatch(addAuthorFailure(`Something went wrong: ${error}`))
+    }
+  }
+}
+
+export function deleteAuthor(_id: string) {
+  return async function (dispatch: ThunkDispatch<AuthorsState, void, Action>) {
+    dispatch(deleteAuthorRequest())
+    try {
+      const res = await axios.delete(
+        `http://localhost:5000/api/v1/authors/${_id}/delete`,
+        { withCredentials: true }
+      )
+      dispatch(deleteAuthorSuccess(res.status))
+    } catch (error: any) {
+      if (error.response.status === 404) {
+        dispatch(deleteAuthorFailure('Resourse is not found'))
+        return
+      }
+      if (error.response.status === 403) {
+        dispatch(
+          deleteAuthorFailure('You are not authorized to perform this action')
+        )
+        return
+      }
+      if (error.response.status === 417) {
+        dispatch(deleteAuthorFailure("Author with books can't be deleted"))
+        return
+      }
+      dispatch(deleteAuthorFailure(`Something went wrong: ${error}`))
     }
   }
 }
