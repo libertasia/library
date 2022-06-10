@@ -21,6 +21,7 @@ import {
   resetBooksError,
   getCategories,
   getAuthors,
+  resetAutorsLoadedStatus,
 } from '../../redux/actions'
 
 // ----------------------------------------------------------------------
@@ -106,7 +107,6 @@ export default function AddBookForm() {
     },
     validationSchema: RegisterSchema,
     onSubmit: (initialValues, { setSubmitting, resetForm }) => {
-      console.log(initialValues)
       setIsErrorVisible(false)
       ;(dispatch as ThunkDispatch<BooksState, void, Action>)(
         addNewBook(
@@ -138,10 +138,11 @@ export default function AddBookForm() {
       setIsErrorVisible(true)
     }
     if (isBookAdded) {
+      dispatch(resetAutorsLoadedStatus())
       setIsSuccessVisible(true)
       resetForm()
     }
-  }, [error, isBookAdded, resetForm])
+  }, [dispatch, error, isBookAdded, resetForm])
 
   const handleSuccessSnackbarClose = () => {
     setIsSuccessVisible(false)

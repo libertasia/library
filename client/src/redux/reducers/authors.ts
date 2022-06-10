@@ -8,6 +8,7 @@ import {
   ADD_AUTHOR_REQUEST,
   ADD_AUTHOR_SUCCESS,
   RESET_AUTHORS_FORM_SNACKBAR,
+  RESET_AUTHORS_LOADED_STATUS,
 } from '../../types'
 
 const initialState: AuthorsState = {
@@ -66,6 +67,11 @@ export function authorsReducer(state = initialState, action: AuthorsActions) {
       ...state,
       error: '',
       isAuthorAdded: false,
+    }
+  case RESET_AUTHORS_LOADED_STATUS:
+    return {
+      ...state,
+      isAuthorsLoaded: false,
     }
   default:
     return state

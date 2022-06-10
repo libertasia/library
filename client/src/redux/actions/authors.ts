@@ -20,6 +20,8 @@ import {
   ADD_AUTHOR_SUCCESS,
   ResetAuthorsFormSnackbarAction,
   RESET_AUTHORS_FORM_SNACKBAR,
+  ResetAuthorsLoadedStatusAction,
+  RESET_AUTHORS_LOADED_STATUS,
 } from '../../types'
 
 export function loadAuthorsRequest(): LoadAuthorsRequestAction {
@@ -73,6 +75,12 @@ export function addAuthorFailure(msg: string): AddAuthorFailureAction {
 export function resetAutorsError(): ResetAuthorsFormSnackbarAction {
   return {
     type: RESET_AUTHORS_FORM_SNACKBAR,
+  }
+}
+
+export function resetAutorsLoadedStatus(): ResetAuthorsLoadedStatusAction {
+  return {
+    type: RESET_AUTHORS_LOADED_STATUS,
   }
 }
 

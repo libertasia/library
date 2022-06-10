@@ -40,6 +40,7 @@ export const SET_AUTHORS_FILTER_VALUE = 'SET_AUTHORS_FILTER_VALUE'
 export const SET_PAGE = 'SET_PAGE'
 export const SET_ROWS_PER_PAGE = 'SET_ROWS_PER_PAGE'
 export const RESET_BOOKS_LOADED_STATUS = 'RESET_BOOKS_LOADED_STATUS'
+export const RESET_AUTHORS_LOADED_STATUS = 'RESET_AUTHORS_LOADED_STATUS'
 
 export const RESET_AUTHORS_FORM_SNACKBAR = 'RESET_AUTHORS_FORM_SNACKBAR'
 export const RESET_BOOKS_FORM_SNACKBAR = 'RESET_BOOKS_FORM_SNACKBAR'
@@ -129,6 +130,7 @@ export type AuthorsActions =
   | AddAuthorSuccessAction
   | AddAuthorFailureAction
   | ResetAuthorsFormSnackbarAction
+  | ResetAuthorsLoadedStatusAction
 
 export type UiActions =
   | SetSearchTypeAction
@@ -141,6 +143,10 @@ export type UiActions =
 
 export type ResetBooksLoadedStatusAction = {
   type: typeof RESET_BOOKS_LOADED_STATUS
+}
+
+export type ResetAuthorsLoadedStatusAction = {
+  type: typeof RESET_AUTHORS_LOADED_STATUS
 }
 
 export type LoadCategoriesRequestAction = {
