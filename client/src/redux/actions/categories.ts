@@ -39,6 +39,8 @@ export function loadCategoriesFailure(
   }
 }
 
+// ----------------------------------------------------------------------
+
 export function getCategories() {
   return async function (
     dispatch: ThunkDispatch<CategoriesState, void, Action>

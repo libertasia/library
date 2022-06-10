@@ -27,6 +27,10 @@ export const ADD_AUTHOR_REQUEST = 'ADD_AUTHOR_REQUEST'
 export const ADD_AUTHOR_SUCCESS = 'ADD_AUTHOR_SUCCESS'
 export const ADD_AUTHOR_FAILURE = 'ADD_AUTHOR_FAILURE'
 
+export const ADD_BOOK_REQUEST = 'ADD_BOOK_REQUEST'
+export const ADD_BOOK_SUCCESS = 'ADD_BOOK_SUCCESS'
+export const ADD_BOOK_FAILURE = 'ADD_BOOK_FAILURE'
+
 export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE'
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE'
 export const SET_STATUS_FILTERS = 'SET_STATUS_FILTERS'
@@ -38,6 +42,7 @@ export const SET_ROWS_PER_PAGE = 'SET_ROWS_PER_PAGE'
 export const RESET_BOOKS_LOADED_STATUS = 'RESET_BOOKS_LOADED_STATUS'
 
 export const RESET_AUTHORS_FORM_SNACKBAR = 'RESET_AUTHORS_FORM_SNACKBAR'
+export const RESET_BOOKS_FORM_SNACKBAR = 'RESET_BOOKS_FORM_SNACKBAR'
 
 // Categories
 
@@ -106,6 +111,10 @@ export type BooksActions =
   | LoadBooksCountSuccessAction
   | LoadBooksCountFailureAction
   | ResetBooksLoadedStatusAction
+  | AddBookRequestAction
+  | AddBookSuccessAction
+  | AddBookFailureAction
+  | ResetBooksFormSnackbarAction
 
 export type CategoriesActions =
   | LoadCategoriesRequestAction
@@ -267,6 +276,26 @@ export type ResetAuthorsFormSnackbarAction = {
   type: typeof RESET_AUTHORS_FORM_SNACKBAR
 }
 
+export type AddBookRequestAction = {
+  type: typeof ADD_BOOK_REQUEST
+}
+
+export type AddBookSuccessAction = {
+  type: typeof ADD_BOOK_SUCCESS
+  payload: BookPropType
+}
+
+export type AddBookFailureAction = {
+  type: typeof ADD_BOOK_FAILURE
+  payload: {
+    msg: string
+  }
+}
+
+export type ResetBooksFormSnackbarAction = {
+  type: typeof RESET_BOOKS_FORM_SNACKBAR
+}
+
 // State
 export type BooksState = {
   books: BookType[]
@@ -275,6 +304,7 @@ export type BooksState = {
   isBooksLoaded: boolean
   isBooksCountLoaded: boolean
   isBookLoaded: boolean
+  isBookAdded: boolean
   isLoading: boolean
   error: string
 }

@@ -8,6 +8,10 @@ import {
   LOAD_BOOKS_COUNT_REQUEST,
   LOAD_BOOKS_COUNT_FAILURE,
   RESET_BOOKS_LOADED_STATUS,
+  ADD_BOOK_REQUEST,
+  ADD_BOOK_SUCCESS,
+  ADD_BOOK_FAILURE,
+  RESET_BOOKS_FORM_SNACKBAR,
 } from '../../types'
 
 const initialState: BooksState = {
@@ -17,6 +21,7 @@ const initialState: BooksState = {
   isBooksLoaded: false,
   isBooksCountLoaded: false,
   isBookLoaded: false,
+  isBookAdded: false,
   isLoading: false,
   error: '',
 }
@@ -63,6 +68,34 @@ export function booksReducer(state = initialState, action: BooksActions) {
       ...state,
       isLoading: false,
       error: action.payload.msg,
+    }
+  case ADD_BOOK_REQUEST:
+    return {
+      ...state,
+      isBookAdded: false,
+      isLoading: true,
+      error: '',
+    }
+  case ADD_BOOK_SUCCESS:
+    return {
+      ...state,
+      book: action.payload,
+      isLoading: false,
+      isBookAdded: true,
+      isBooksLoaded: false,
+      error: '',
+    }
+  case ADD_BOOK_FAILURE:
+    return {
+      ...state,
+      error: action.payload.msg,
+      isLoading: false,
+    }
+  case RESET_BOOKS_FORM_SNACKBAR:
+    return {
+      ...state,
+      error: '',
+      isBookAdded: false,
     }
   default:
     return state

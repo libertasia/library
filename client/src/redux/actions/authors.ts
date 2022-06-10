@@ -76,6 +76,8 @@ export function resetAutorsError(): ResetAuthorsFormSnackbarAction {
   }
 }
 
+// ----------------------------------------------------------------------
+
 export function getAuthors() {
   return async function (dispatch: ThunkDispatch<AuthorsState, void, Action>) {
     dispatch(loadAuthorsRequest())

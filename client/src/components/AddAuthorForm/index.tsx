@@ -28,7 +28,7 @@ export default function AddAuthorForm() {
     return () => {
       dispatch(resetAutorsError())
     }
-  }, [])
+  }, [dispatch])
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()

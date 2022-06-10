@@ -21,11 +21,12 @@ export default function Login() {
   }
 
   useEffect(() => {
-    async function getCurrentUser() {
-      const res = await axios.get('/api/v1/users/current')
-      setCurrentUser(res.data.email)
-    }
-    getCurrentUser()
+    axios
+      .get('/api/v1/users/current', { withCredentials: true })
+      .then((res) => {
+        const currentEmail = res.data.email || 'Anonymous user'
+        setCurrentUser(currentEmail)
+      })
   }, [])
 
   const clientId =

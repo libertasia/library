@@ -86,7 +86,7 @@ export default function Home() {
         <Button
           variant="contained"
           component={RouterLink}
-          to="#"
+          to="/dashboard/add-book"
           startIcon={<Iconify icon="eva:plus-fill" />}
         >
           New Book

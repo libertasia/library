@@ -19,6 +19,15 @@ import {
   BooksPropType,
   ResetBooksLoadedStatusAction,
   RESET_BOOKS_LOADED_STATUS,
+  AddBookRequestAction,
+  ADD_BOOK_REQUEST,
+  BookPropType,
+  AddBookSuccessAction,
+  ADD_BOOK_SUCCESS,
+  AddBookFailureAction,
+  ADD_BOOK_FAILURE,
+  ResetBooksFormSnackbarAction,
+  RESET_BOOKS_FORM_SNACKBAR,
 } from '../../types'
 
 export function resetBooksLoadedStatus(): ResetBooksLoadedStatusAction {
@@ -77,6 +86,36 @@ export function loadBooksCountFailure(
   }
 }
 
+export function addBookRequest(): AddBookRequestAction {
+  return {
+    type: ADD_BOOK_REQUEST,
+  }
+}
+
+export function addBookSuccess(payload: BookPropType): AddBookSuccessAction {
+  return {
+    type: ADD_BOOK_SUCCESS,
+    payload,
+  }
+}
+
+export function addBookFailure(msg: string): AddBookFailureAction {
+  return {
+    type: ADD_BOOK_FAILURE,
+    payload: {
+      msg,
+    },
+  }
+}
+
+export function resetBooksError(): ResetBooksFormSnackbarAction {
+  return {
+    type: RESET_BOOKS_FORM_SNACKBAR,
+  }
+}
+
+// ----------------------------------------------------------------------
+
 export function getBooksPaginated(
   page?: number,
   perPage?: number,
@@ -119,6 +158,50 @@ export function getBooksCount() {
         return
       }
       dispatch(loadBooksCountFailure('Something went wrong'))
+    }
+  }
+}
+
+export function addNewBook(
+  isbn: string,
+  title: string,
+  categoryId: string,
+  description: string,
+  publisher: string,
+  authorsIds: string[],
+  publishedYear: string,
+  numPage: string
+) {
+  return async function (dispatch: ThunkDispatch<BooksState, void, Action>) {
+    dispatch(addBookRequest())
+    try {
+      const res = await axios.post(
+        `http://localhost:5000/api/v1/books/create`,
+        {
+          isbn,
+          title,
+          categoryId,
+          description,
+          publisher,
+          authorsIds,
+          publishedYear,
+          numPage,
+        },
+        { withCredentials: true }
+      )
+      dispatch(addBookSuccess(res.data))
+    } catch (error: any) {
+      if (error.response.status === 404) {
+        dispatch(addBookFailure('Resourse is not found'))
+        return
+      }
+      if (error.response.status === 403) {
+        dispatch(
+          addBookFailure('You are not authorized to perform this action')
+        )
+        return
+      }
+      dispatch(addBookFailure(`Something went wrong: ${error}`))
     }
   }
 }

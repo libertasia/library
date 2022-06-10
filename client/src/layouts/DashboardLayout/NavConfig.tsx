@@ -21,9 +21,19 @@ const navConfig = [
     icon: getIcon('fluent:people-add-16-filled'),
   },
   {
+    title: 'add Book',
+    path: '/dashboard/add-book',
+    icon: getIcon('ant-design:file-add-filled'),
+  },
+  {
     title: 'login',
     path: '/dashboard/login',
     icon: getIcon('eva:lock-fill'),
+  },
+  {
+    title: 'logout',
+    path: '/dashboard/logout',
+    icon: getIcon('eva:log-out-fill'),
   },
 ]
 

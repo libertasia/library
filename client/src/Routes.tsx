@@ -4,6 +4,7 @@ import DashboardLayout from './layouts/DashboardLayout'
 import Home from './pages/Home'
 import Authors from './pages/Authors'
 import AddAuthor from './pages/AddAuthor'
+import AddBook from './pages/AddBook'
 import Login from './pages/Login'
 import Page404 from './pages/Page404'
 
@@ -18,6 +19,7 @@ export default function AppRoutes() {
         { path: 'login', element: <Login /> },
         { path: 'authors', element: <Authors /> },
         { path: 'add-author', element: <AddAuthor /> },
+        { path: 'add-book', element: <AddBook /> },
       ],
     },
     { path: '*', element: <Page404 /> },
