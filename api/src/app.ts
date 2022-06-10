@@ -24,7 +24,21 @@ app.set('port', process.env.PORT || 3000)
 // Global middleware
 app.use(apiContentType)
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+  origin: (origin: any, callback: any) => {
+    // add production address here too
+    const whitelist = [
+      'http://localhost:3000',
+      'http://localhost:5000'
+    ]
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error(`Origin ${origin} not allowed by CORS policy`))
+    }
+  },
+  credentials: true
+}))
 app.use(cookieParser())
 
 app.use(passport.initialize())

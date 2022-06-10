@@ -25,15 +25,6 @@ export default function AddAuthorForm() {
   )
 
   useEffect(() => {
-    if (error) {
-      setIsErrorVisible(true)
-    }
-    if (isAuthorAdded) {
-      setIsSuccessVisible(true)
-    }
-  }, [error, isAuthorAdded])
-
-  useEffect(() => {
     return () => {
       dispatch(resetAutorsError())
     }
@@ -67,7 +58,6 @@ export default function AddAuthorForm() {
     },
     validationSchema: RegisterSchema,
     onSubmit: (initialValues, { setSubmitting, resetForm }) => {
-      console.log(initialValues)
       setIsErrorVisible(false)
       ;(dispatch as ThunkDispatch<AuthorsState, void, Action>)(
         addNewAuthor(
@@ -77,17 +67,28 @@ export default function AddAuthorForm() {
           initialValues.biography
         )
       )
-      if (isAuthorAdded) {
-        setIsSuccessVisible(true)
-        //resetForm()
-      } else if (error) {
-        setIsErrorVisible(true)
-      }
       setSubmitting(false)
     },
   })
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik
+  const {
+    errors,
+    touched,
+    handleSubmit,
+    isSubmitting,
+    getFieldProps,
+    resetForm,
+  } = formik
+
+  useEffect(() => {
+    if (error) {
+      setIsErrorVisible(true)
+    }
+    if (isAuthorAdded) {
+      setIsSuccessVisible(true)
+      resetForm()
+    }
+  }, [error, isAuthorAdded, resetForm])
 
   const handleSuccessSnackbarClose = () => {
     setIsSuccessVisible(false)
@@ -102,7 +103,7 @@ export default function AddAuthorForm() {
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Snackbar
           open={isSuccessVisible}
-          autoHideDuration={3000}
+          autoHideDuration={5000}
           onClose={handleSuccessSnackbarClose}
         >
           <Alert
@@ -115,7 +116,7 @@ export default function AddAuthorForm() {
         </Snackbar>
         <Snackbar
           open={isErrorVisible}
-          autoHideDuration={3000}
+          autoHideDuration={5000}
           onClose={handleErrorSnackbarClose}
         >
           <Alert

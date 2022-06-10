@@ -16,7 +16,7 @@ const navConfig = [
     icon: getIcon('eva:people-fill'),
   },
   {
-    title: 'addAuthor',
+    title: 'add Author',
     path: '/dashboard/add-author',
     icon: getIcon('fluent:people-add-16-filled'),
   },

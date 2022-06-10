@@ -9,13 +9,22 @@ export default function(
   res: Response,
   next: NextFunction
 ) {
+  logger.error(`ERROR: ${error}`)
   if (error.source) {
     logger.error(error.source)
   }
-
-  res.status(error.statusCode).json({
-    status: 'error',
-    statusCode: error.statusCode,
-    message: error.message,
-  })
+  if (error.statusCode) {
+    res.status(error.statusCode).json({
+      status: 'error',
+      statusCode: error.statusCode,
+      message: error.message,
+    })
+  }
+  else {
+    res.status(500).json({
+      status: 'error',
+      statusCode: 500,
+      message: `ERROR: ${error}`,
+    })
+  }
 }

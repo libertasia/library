@@ -7,7 +7,7 @@ export default function Login() {
 
   const handleSuccess = async (googleResponse: any) => {
     const tokenId = googleResponse.credential
-    console.log(tokenId)
+    console.log(`got tokenId from google: ${tokenId}`)
 
     await axios.post(
       '/api/v1/auth/google-login',

@@ -15,6 +15,7 @@ const router = express.Router()
 router.get('/', findAll)
 
 router.post('/create', verifyAuth, adminRequired, createAuthor)
+//router.post('/create', createAuthor)
 
 router.put('/:authorId/update', verifyAuth, adminRequired, updateAuthor)
 

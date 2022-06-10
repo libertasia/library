@@ -21,6 +21,10 @@ export default function verifyAuth(
 
     const token = headerToken || cookieToken
 
+    if (!token) {
+      throw new Error('Authentication token not found')
+    }
+
     const user = jwt.verify(token, JWT_SECRET)
     req.user = user
     next()

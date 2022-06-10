@@ -112,7 +112,13 @@ export function addNewAuthor(
         dispatch(addAuthorFailure('Resourse is not found'))
         return
       }
-      dispatch(addAuthorFailure('Something went wrong'))
+      if (error.response.status === 403) {
+        dispatch(
+          addAuthorFailure('You are not authorized to perform this action')
+        )
+        return
+      }
+      dispatch(addAuthorFailure(`Something went wrong: ${error}`))
     }
   }
 }
