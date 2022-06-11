@@ -7,6 +7,16 @@ const findAll = async (): Promise<AuthorDocument[]> => {
   .sort({ firstName: 1 })
 }
 
+const findById = async (authorId: string): Promise<AuthorDocument> => {
+  const foundAuthor = await Author.findById(authorId)
+
+  if (!foundAuthor) {
+    throw new NotFoundError(`Author ${authorId} not found`)
+  }
+
+  return foundAuthor
+}
+
 const createAuthor = async (
   author: AuthorDocument
 ): Promise<AuthorDocument> => {
@@ -48,6 +58,7 @@ const deleteAuthor = async (
 
 export default {
   findAll,
+  findById,
   createAuthor,
   updateAuthor,
   deleteAuthor,

@@ -5,6 +5,7 @@ import {
   createAuthor,
   updateAuthor,
   deleteAuthor,
+  findAuthorById,
 } from '../controllers/author'
 import verifyAuth from '../middlewares/verifyAuth'
 import adminRequired from '../middlewares/adminRequired'
@@ -13,9 +14,9 @@ const router = express.Router()
 
 // Every path we define here will get /api/v1/authors prefix
 router.get('/', findAll)
+router.get('/:authorId', findAuthorById)
 
 router.post('/create', verifyAuth, adminRequired, createAuthor)
-//router.post('/create', createAuthor)
 
 router.put('/:authorId/update', verifyAuth, adminRequired, updateAuthor)
 

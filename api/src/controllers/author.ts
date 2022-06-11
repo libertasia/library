@@ -21,6 +21,23 @@ export const findAll = async (
   }
 }
 
+// GET /authors/:id
+export const findAuthorById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res.json(await AuthorService.findById(req.params.authorId))
+  } catch (error) {
+    if (error instanceof Error && error.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', error))
+    } else {
+      next(error)
+    }
+  }
+}
+
 // POST /authors/create
 export const createAuthor = async (
   req: Request,
