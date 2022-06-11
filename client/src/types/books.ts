@@ -121,7 +121,7 @@ export type LoadBookByIdRequestAction = {
 
 export type LoadBookByIdSuccessAction = {
   type: typeof LOAD_BOOK_BY_ID_SUCCESS
-  payload: BookPropType
+  payload: BooksPropType
 }
 
 export type LoadBookByIdFailureAction = {

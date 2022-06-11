@@ -100,6 +100,7 @@ export function authorsReducer(
       ...state,
       error: '',
       isAuthorAdded: false,
+      isAuthorUpdated: false,
     }
   case RESET_AUTHORS_LOADED_STATUS:
     return {

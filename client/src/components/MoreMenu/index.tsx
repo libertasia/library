@@ -14,9 +14,13 @@ import Iconify from '../Iconify'
 
 export type MoreMenuPropType = {
   onDeleteBtnClick?: () => void
+  route: string
 }
 
-export default function MoreMenu({ onDeleteBtnClick }: MoreMenuPropType) {
+export default function MoreMenu({
+  onDeleteBtnClick,
+  route,
+}: MoreMenuPropType) {
   const ref = useRef(null)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -48,7 +52,7 @@ export default function MoreMenu({ onDeleteBtnClick }: MoreMenuPropType) {
 
         <MenuItem
           component={RouterLink}
-          to="#"
+          to={route}
           sx={{ color: 'text.secondary' }}
         >
           <ListItemIcon>

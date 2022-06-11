@@ -157,6 +157,7 @@ export function booksReducer(
       ...state,
       error: '',
       isBookAdded: false,
+      isBookUpdated: false,
     }
   case UPDATE_BOOK_REQUEST:
     return {

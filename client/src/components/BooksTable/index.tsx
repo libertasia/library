@@ -207,7 +207,10 @@ export default function BooksTable({
                     <TableCell></TableCell>
                   )}
                   <TableCell align="right">
-                    <MoreMenu onDeleteBtnClick={() => handleDeleteBook(_id)} />
+                    <MoreMenu
+                      onDeleteBtnClick={() => handleDeleteBook(_id)}
+                      route={`/dashboard/updateBook/${_id}`}
+                    />
                   </TableCell>
                 </TableRow>
               )

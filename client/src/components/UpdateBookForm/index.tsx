@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import { useFormik, Form, FormikProvider } from 'formik'
 import { Action } from 'redux'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { Stack, TextField } from '@mui/material'
@@ -15,21 +16,26 @@ import {
   AppState,
   CategoriesState,
   AuthorsState,
+  BookPropType,
 } from '../../types'
 import {
-  addNewBook,
   resetBooksFormSnackbar,
   getCategories,
   getAuthors,
   resetAutorsLoadedStatus,
+  updateBook,
 } from '../../redux/actions'
 
 // ----------------------------------------------------------------------
 
-export default function AddBookForm() {
+export default function UpdateBookForm({ book }: BookPropType) {
   const dispatch = useDispatch()
 
-  const { isBookAdded, error } = useSelector(
+  const navigate = useNavigate()
+
+  const authorsIds = book.authors.map((author) => author._id)
+
+  const { isBookUpdated, error } = useSelector(
     (state: AppState) => state.booksData
   )
 
@@ -97,20 +103,21 @@ export default function AddBookForm() {
 
   const formik = useFormik({
     initialValues: {
-      isbn: '',
-      title: '',
-      categoryId: '',
-      description: '',
-      publisher: '',
-      authorsIds: [],
-      publishedYear: '',
-      numPage: '',
+      isbn: book.isbn,
+      title: book.title,
+      categoryId: book.category._id,
+      description: book.description,
+      publisher: book.publisher,
+      authorsIds: authorsIds,
+      publishedYear: book.publishedYear,
+      numPage: book.numPage,
     },
     validationSchema: RegisterSchema,
     onSubmit: (initialValues, { setSubmitting, resetForm }) => {
       setIsErrorVisible(false)
       ;(dispatch as ThunkDispatch<BooksState, void, Action>)(
-        addNewBook(
+        updateBook(
+          book._id,
           initialValues.isbn,
           initialValues.title,
           initialValues.categoryId,
@@ -138,12 +145,13 @@ export default function AddBookForm() {
     if (error) {
       setIsErrorVisible(true)
     }
-    if (isBookAdded) {
+    if (isBookUpdated) {
       dispatch(resetAutorsLoadedStatus())
       setIsSuccessVisible(true)
       resetForm()
+      navigate('/dashboard/books', { replace: true })
     }
-  }, [dispatch, error, isBookAdded, resetForm])
+  }, [dispatch, error, isBookUpdated, resetForm, navigate])
 
   const handleSuccessSnackbarClose = () => {
     setIsSuccessVisible(false)
@@ -166,7 +174,7 @@ export default function AddBookForm() {
             sx={{ marginBottom: 2 }}
             severity="success"
           >
-            Book added successfully!
+            Book updated successfully!
           </Alert>
         </Snackbar>
         <Snackbar
@@ -179,7 +187,7 @@ export default function AddBookForm() {
             sx={{ marginBottom: 2 }}
             severity="error"
           >
-            Could not add book: {error}
+            Could not update book: {error}
           </Alert>
         </Snackbar>
 

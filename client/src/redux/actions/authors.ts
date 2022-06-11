@@ -73,7 +73,7 @@ export function loadAuthorByIdRequest(): LoadAuthorByIdRequestAction {
 }
 
 export function loadAuthorByIdSuccess(
-  payload: AuthorPropType
+  payload: AuthorsPropType
 ): LoadAuthorByIdSuccessAction {
   return {
     type: LOAD_AUTHOR_BY_ID_SUCCESS,
@@ -116,7 +116,7 @@ export function addAuthorFailure(msg: string): AddAuthorFailureAction {
   }
 }
 
-export function resetAutorsError(): ResetAuthorsFormSnackbarAction {
+export function resetAuthorsFormSnackbar(): ResetAuthorsFormSnackbarAction {
   return {
     type: RESET_AUTHORS_FORM_SNACKBAR,
   }
@@ -272,7 +272,7 @@ export function updateAuthor(
   _id: string,
   firstName: string,
   lastName: string,
-  birthYear: string,
+  birthYear: number,
   biography: string
 ) {
   return async function (dispatch: ThunkDispatch<AuthorsState, void, Action>) {

@@ -90,7 +90,10 @@ function AuthorsTableRow({ author }: AuthorPropType) {
           </List>
         </TableCell>
         <TableCell align="right">
-          <MoreMenu onDeleteBtnClick={() => handleDeleteAuthor(_id)} />
+          <MoreMenu
+            onDeleteBtnClick={() => handleDeleteAuthor(_id)}
+            route={`/dashboard/updateAuthor/${_id}`}
+          />
         </TableCell>
       </TableRow>
       <TableRow>

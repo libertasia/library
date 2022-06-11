@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import { useFormik, Form, FormikProvider } from 'formik'
 import { Action } from 'redux'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { Stack, TextField } from '@mui/material'
@@ -9,18 +10,20 @@ import { LoadingButton } from '@mui/lab'
 import Alert from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
 
-import { AuthorsState, AppState } from '../../types'
-import { addNewAuthor, resetAuthorsFormSnackbar } from '../../redux/actions'
+import { AuthorsState, AppState, AuthorPropType } from '../../types'
+import { resetAuthorsFormSnackbar, updateAuthor } from '../../redux/actions'
 
 // ----------------------------------------------------------------------
 
-export default function AddAuthorForm() {
+export default function UpdateAuthorForm({ author }: AuthorPropType) {
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
 
   const [isErrorVisible, setIsErrorVisible] = useState(false)
   const [isSuccessVisible, setIsSuccessVisible] = useState(false)
 
-  const { isAuthorAdded, error } = useSelector(
+  const { isAuthorUpdated, error } = useSelector(
     (state: AppState) => state.authors
   )
 
@@ -51,16 +54,17 @@ export default function AddAuthorForm() {
 
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      birthYear: '',
-      biography: '',
+      firstName: author.firstName,
+      lastName: author.lastName,
+      birthYear: author.birthYear,
+      biography: author.biography,
     },
     validationSchema: RegisterSchema,
     onSubmit: (initialValues, { setSubmitting, resetForm }) => {
       setIsErrorVisible(false)
       ;(dispatch as ThunkDispatch<AuthorsState, void, Action>)(
-        addNewAuthor(
+        updateAuthor(
+          author._id,
           initialValues.firstName,
           initialValues.lastName,
           initialValues.birthYear,
@@ -84,11 +88,12 @@ export default function AddAuthorForm() {
     if (error) {
       setIsErrorVisible(true)
     }
-    if (isAuthorAdded) {
+    if (isAuthorUpdated) {
       setIsSuccessVisible(true)
       resetForm()
+      navigate('/dashboard/authors', { replace: true })
     }
-  }, [error, isAuthorAdded, resetForm])
+  }, [error, isAuthorUpdated, resetForm, navigate])
 
   const handleSuccessSnackbarClose = () => {
     setIsSuccessVisible(false)
@@ -111,7 +116,7 @@ export default function AddAuthorForm() {
             sx={{ marginBottom: 2 }}
             severity="success"
           >
-            Author added successfully!
+            Author updated successfully!
           </Alert>
         </Snackbar>
         <Snackbar
@@ -124,7 +129,7 @@ export default function AddAuthorForm() {
             sx={{ marginBottom: 2 }}
             severity="error"
           >
-            Could not add author: {error}
+            Could not update author: {error}
           </Alert>
         </Snackbar>
         <Stack spacing={3}>
@@ -173,7 +178,7 @@ export default function AddAuthorForm() {
             variant="contained"
             loading={isSubmitting}
           >
-            Add author
+            Update author
           </LoadingButton>
         </Stack>
       </Form>

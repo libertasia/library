@@ -32,8 +32,8 @@ export type AuthorType = {
   _id: string
   firstName: string
   lastName: string
-  birthYear?: number
-  biography?: string
+  birthYear: number
+  biography: string
   books?: BookType[]
 }
 
@@ -88,7 +88,7 @@ export type LoadAuthorByIdRequestAction = {
 
 export type LoadAuthorByIdSuccessAction = {
   type: typeof LOAD_AUTHOR_BY_ID_SUCCESS
-  payload: AuthorPropType
+  payload: AuthorsPropType
 }
 
 export type LoadAuthorByIdFailureAction = {

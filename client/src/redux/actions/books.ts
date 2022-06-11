@@ -111,7 +111,7 @@ export function loadBookByIdRequest(): LoadBookByIdRequestAction {
 }
 
 export function loadBookByIdSuccess(
-  payload: BookPropType
+  payload: BooksPropType
 ): LoadBookByIdSuccessAction {
   return {
     type: LOAD_BOOK_BY_ID_SUCCESS,
@@ -150,7 +150,7 @@ export function addBookFailure(msg: string): AddBookFailureAction {
   }
 }
 
-export function resetBooksError(): ResetBooksFormSnackbarAction {
+export function resetBooksFormSnackbar(): ResetBooksFormSnackbarAction {
   return {
     type: RESET_BOOKS_FORM_SNACKBAR,
   }
@@ -348,8 +348,8 @@ export function updateBook(
   description: string,
   publisher: string,
   authorsIds: string[],
-  publishedYear: string,
-  numPage: string
+  publishedYear: number,
+  numPage: number
 ) {
   return async function (dispatch: ThunkDispatch<BooksState, void, Action>) {
     dispatch(updateBookRequest())
