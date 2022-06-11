@@ -17,6 +17,12 @@ import {
   DELETE_BOOK_FAILURE,
   AuthorsActions,
   RESET_AUTHORS_LOADED_STATUS,
+  LOAD_BOOK_BY_ID_REQUEST,
+  LOAD_BOOK_BY_ID_SUCCESS,
+  LOAD_BOOK_BY_ID_FAILURE,
+  UPDATE_BOOK_REQUEST,
+  UPDATE_BOOK_SUCCESS,
+  UPDATE_BOOK_FAILURE,
 } from '../../types'
 
 const initialState: BooksState = {
@@ -27,6 +33,7 @@ const initialState: BooksState = {
   isBooksCountLoaded: false,
   isBookLoaded: false,
   isBookAdded: false,
+  isBookUpdated: false,
   isLoading: false,
   error: '',
   successCode: 0,
@@ -86,6 +93,23 @@ export function booksReducer(
       isLoading: false,
       error: action.payload.msg,
     }
+  case LOAD_BOOK_BY_ID_REQUEST:
+    return {
+      ...state,
+      isLoading: true,
+    }
+  case LOAD_BOOK_BY_ID_SUCCESS:
+    return {
+      ...state,
+      book: action.payload,
+      isLoading: false,
+    }
+  case LOAD_BOOK_BY_ID_FAILURE:
+    return {
+      ...state,
+      isLoading: false,
+      error: action.payload.msg,
+    }
   case ADD_BOOK_REQUEST:
     return {
       ...state,
@@ -133,6 +157,28 @@ export function booksReducer(
       ...state,
       error: '',
       isBookAdded: false,
+    }
+  case UPDATE_BOOK_REQUEST:
+    return {
+      ...state,
+      isBookUpdated: false,
+      isLoading: true,
+      error: '',
+    }
+  case UPDATE_BOOK_SUCCESS:
+    return {
+      ...state,
+      book: action.payload,
+      isLoading: false,
+      isBookUpdated: true,
+      isBooksLoaded: false,
+      error: '',
+    }
+  case UPDATE_BOOK_FAILURE:
+    return {
+      ...state,
+      error: action.payload.msg,
+      isLoading: false,
     }
   default:
     return state

@@ -34,6 +34,18 @@ import {
   DELETE_BOOK_SUCCESS,
   DeleteBookFailureAction,
   DELETE_BOOK_FAILURE,
+  LoadBookByIdRequestAction,
+  LOAD_BOOK_BY_ID_REQUEST,
+  LoadBookByIdSuccessAction,
+  LOAD_BOOK_BY_ID_SUCCESS,
+  LoadBookByIdFailureAction,
+  LOAD_BOOK_BY_ID_FAILURE,
+  UpdateBookRequestAction,
+  UPDATE_BOOK_REQUEST,
+  UpdateBookSuccessAction,
+  UPDATE_BOOK_SUCCESS,
+  UpdateBookFailureAction,
+  UPDATE_BOOK_FAILURE,
 } from '../../types'
 
 export function resetBooksLoadedStatus(): ResetBooksLoadedStatusAction {
@@ -92,6 +104,30 @@ export function loadBooksCountFailure(
   }
 }
 
+export function loadBookByIdRequest(): LoadBookByIdRequestAction {
+  return {
+    type: LOAD_BOOK_BY_ID_REQUEST,
+  }
+}
+
+export function loadBookByIdSuccess(
+  payload: BookPropType
+): LoadBookByIdSuccessAction {
+  return {
+    type: LOAD_BOOK_BY_ID_SUCCESS,
+    payload,
+  }
+}
+
+export function loadBookByIdFailure(msg: string): LoadBookByIdFailureAction {
+  return {
+    type: LOAD_BOOK_BY_ID_FAILURE,
+    payload: {
+      msg,
+    },
+  }
+}
+
 export function addBookRequest(): AddBookRequestAction {
   return {
     type: ADD_BOOK_REQUEST,
@@ -142,6 +178,30 @@ export function deleteBookFailure(msg: string): DeleteBookFailureAction {
   }
 }
 
+export function updateBookRequest(): UpdateBookRequestAction {
+  return {
+    type: UPDATE_BOOK_REQUEST,
+  }
+}
+
+export function updateBookSuccess(
+  payload: BookPropType
+): UpdateBookSuccessAction {
+  return {
+    type: UPDATE_BOOK_SUCCESS,
+    payload,
+  }
+}
+
+export function updateBookFailure(msg: string): UpdateBookFailureAction {
+  return {
+    type: UPDATE_BOOK_FAILURE,
+    payload: {
+      msg,
+    },
+  }
+}
+
 // ----------------------------------------------------------------------
 
 export function getBooksPaginated(
@@ -186,6 +246,23 @@ export function getBooksCount() {
         return
       }
       dispatch(loadBooksCountFailure('Something went wrong'))
+    }
+  }
+}
+
+export function getBookById(_id: string) {
+  return async function (dispatch: ThunkDispatch<BooksState, void, Action>) {
+    dispatch(loadBookByIdRequest())
+    try {
+      const res = await axios.get(`http://localhost:5000/api/v1/books/${_id}`)
+      const responseData = res.data
+      dispatch(loadBookByIdSuccess(responseData.books))
+    } catch (error: any) {
+      if (error.response.status === 404) {
+        dispatch(loadBookByIdFailure('Resourse is not found'))
+        return
+      }
+      dispatch(loadBookByIdFailure('Something went wrong'))
     }
   }
 }
@@ -259,6 +336,51 @@ export function deleteBook(_id: string) {
         return
       }
       dispatch(deleteBookFailure(`Something went wrong: ${error}`))
+    }
+  }
+}
+
+export function updateBook(
+  _id: string,
+  isbn: string,
+  title: string,
+  categoryId: string,
+  description: string,
+  publisher: string,
+  authorsIds: string[],
+  publishedYear: string,
+  numPage: string
+) {
+  return async function (dispatch: ThunkDispatch<BooksState, void, Action>) {
+    dispatch(updateBookRequest())
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/api/v1/books/${_id}/update`,
+        {
+          isbn,
+          title,
+          categoryId,
+          description,
+          publisher,
+          authorsIds,
+          publishedYear,
+          numPage,
+        },
+        { withCredentials: true }
+      )
+      dispatch(updateBookSuccess(res.data))
+    } catch (error: any) {
+      if (error.response.status === 404) {
+        dispatch(updateBookFailure('Resourse is not found'))
+        return
+      }
+      if (error.response.status === 403) {
+        dispatch(
+          updateBookFailure('You are not authorized to perform this action')
+        )
+        return
+      }
+      dispatch(updateBookFailure(`Something went wrong: ${error}`))
     }
   }
 }

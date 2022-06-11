@@ -28,6 +28,18 @@ import {
   DELETE_AUTHOR_SUCCESS,
   DeleteAuthorFailureAction,
   DELETE_AUTHOR_FAILURE,
+  LoadAuthorByIdRequestAction,
+  LOAD_AUTHOR_BY_ID_REQUEST,
+  LoadAuthorByIdSuccessAction,
+  LOAD_AUTHOR_BY_ID_SUCCESS,
+  LoadAuthorByIdFailureAction,
+  LOAD_AUTHOR_BY_ID_FAILURE,
+  UpdateAuthorRequestAction,
+  UPDATE_AUTHOR_REQUEST,
+  UpdateAuthorSuccessAction,
+  UPDATE_AUTHOR_SUCCESS,
+  UpdateAuthorFailureAction,
+  UPDATE_AUTHOR_FAILURE,
 } from '../../types'
 
 export function loadAuthorsRequest(): LoadAuthorsRequestAction {
@@ -48,6 +60,32 @@ export function loadAuthorsSuccess(
 export function loadAuthorsFailure(msg: string): LoadAuthorsFailureAction {
   return {
     type: LOAD_AUTHORS_FAILURE,
+    payload: {
+      msg,
+    },
+  }
+}
+
+export function loadAuthorByIdRequest(): LoadAuthorByIdRequestAction {
+  return {
+    type: LOAD_AUTHOR_BY_ID_REQUEST,
+  }
+}
+
+export function loadAuthorByIdSuccess(
+  payload: AuthorPropType
+): LoadAuthorByIdSuccessAction {
+  return {
+    type: LOAD_AUTHOR_BY_ID_SUCCESS,
+    payload,
+  }
+}
+
+export function loadAuthorByIdFailure(
+  msg: string
+): LoadAuthorByIdFailureAction {
+  return {
+    type: LOAD_AUTHOR_BY_ID_FAILURE,
     payload: {
       msg,
     },
@@ -112,6 +150,30 @@ export function deleteAuthorFailure(msg: string): DeleteAuthorFailureAction {
   }
 }
 
+export function updateAuthorRequest(): UpdateAuthorRequestAction {
+  return {
+    type: UPDATE_AUTHOR_REQUEST,
+  }
+}
+
+export function updateAuthorSuccess(
+  payload: AuthorPropType
+): UpdateAuthorSuccessAction {
+  return {
+    type: UPDATE_AUTHOR_SUCCESS,
+    payload,
+  }
+}
+
+export function updateAuthorFailure(msg: string): UpdateAuthorFailureAction {
+  return {
+    type: UPDATE_AUTHOR_FAILURE,
+    payload: {
+      msg,
+    },
+  }
+}
+
 // ----------------------------------------------------------------------
 
 export function getAuthors() {
@@ -126,6 +188,22 @@ export function getAuthors() {
         return
       }
       dispatch(loadAuthorsFailure('Something went wrong'))
+    }
+  }
+}
+
+export function getAuthorById(_id: string) {
+  return async function (dispatch: ThunkDispatch<AuthorsState, void, Action>) {
+    dispatch(loadAuthorByIdRequest())
+    try {
+      const res = await axios.get(`http://localhost:5000/api/v1/authors/${_id}`)
+      dispatch(loadAuthorByIdSuccess(res.data))
+    } catch (error: any) {
+      if (error.response.status === 404) {
+        dispatch(loadAuthorByIdFailure('Resourse is not found'))
+        return
+      }
+      dispatch(loadAuthorByIdFailure('Something went wrong'))
     }
   }
 }
@@ -186,6 +264,38 @@ export function deleteAuthor(_id: string) {
         return
       }
       dispatch(deleteAuthorFailure(`Something went wrong: ${error}`))
+    }
+  }
+}
+
+export function updateAuthor(
+  _id: string,
+  firstName: string,
+  lastName: string,
+  birthYear: string,
+  biography: string
+) {
+  return async function (dispatch: ThunkDispatch<AuthorsState, void, Action>) {
+    dispatch(updateAuthorRequest())
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/api/v1/authors/${_id}/update`,
+        { firstName, lastName, birthYear, biography },
+        { withCredentials: true }
+      )
+      dispatch(updateAuthorSuccess(res.data))
+    } catch (error: any) {
+      if (error.response.status === 404) {
+        dispatch(updateAuthorFailure('Resourse is not found'))
+        return
+      }
+      if (error.response.status === 403) {
+        dispatch(
+          updateAuthorFailure('You are not authorized to perform this action')
+        )
+        return
+      }
+      dispatch(updateAuthorFailure(`Something went wrong: ${error}`))
     }
   }
 }

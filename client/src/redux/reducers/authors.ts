@@ -14,6 +14,12 @@ import {
   DELETE_AUTHOR_FAILURE,
   BooksActions,
   RESET_BOOKS_LOADED_STATUS,
+  LOAD_AUTHOR_BY_ID_REQUEST,
+  LOAD_AUTHOR_BY_ID_SUCCESS,
+  LOAD_AUTHOR_BY_ID_FAILURE,
+  UPDATE_AUTHOR_REQUEST,
+  UPDATE_AUTHOR_SUCCESS,
+  UPDATE_AUTHOR_FAILURE,
 } from '../../types'
 
 const initialState: AuthorsState = {
@@ -24,6 +30,7 @@ const initialState: AuthorsState = {
   isLoading: false,
   error: '',
   successCode: 0,
+  isAuthorUpdated: false,
 }
 
 export function authorsReducer(
@@ -44,6 +51,23 @@ export function authorsReducer(
       isAuthorsLoaded: true,
     }
   case LOAD_AUTHORS_FAILURE:
+    return {
+      ...state,
+      isLoading: false,
+      error: action.payload.msg,
+    }
+  case LOAD_AUTHOR_BY_ID_REQUEST:
+    return {
+      ...state,
+      isLoading: true,
+    }
+  case LOAD_AUTHOR_BY_ID_SUCCESS:
+    return {
+      ...state,
+      author: action.payload,
+      isLoading: false,
+    }
+  case LOAD_AUTHOR_BY_ID_FAILURE:
     return {
       ...state,
       isLoading: false,
@@ -105,6 +129,28 @@ export function authorsReducer(
       error: '',
     }
   case DELETE_AUTHOR_FAILURE:
+    return {
+      ...state,
+      error: action.payload.msg,
+      isLoading: false,
+    }
+  case UPDATE_AUTHOR_REQUEST:
+    return {
+      ...state,
+      isAuthorUpdated: false,
+      isLoading: true,
+      error: '',
+    }
+  case UPDATE_AUTHOR_SUCCESS:
+    return {
+      ...state,
+      author: action.payload,
+      isLoading: false,
+      isAuthorUpdated: true,
+      isAuthorsLoaded: false,
+      error: '',
+    }
+  case UPDATE_AUTHOR_FAILURE:
     return {
       ...state,
       error: action.payload.msg,

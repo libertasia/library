@@ -197,6 +197,7 @@ export type BooksState = {
   isBooksCountLoaded: boolean
   isBookLoaded: boolean
   isBookAdded: boolean
+  isBookUpdated: boolean
   isLoading: boolean
   error: string
   successCode: number

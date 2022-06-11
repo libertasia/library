@@ -161,6 +161,7 @@ export type AuthorsState = {
   author: AuthorType[]
   isAuthorsLoaded: boolean
   isAuthorAdded: boolean
+  isAuthorUpdated: boolean
   isLoading: boolean
   error: string
   successCode: number
