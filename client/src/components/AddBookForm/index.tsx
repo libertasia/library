@@ -47,6 +47,7 @@ export default function AddBookForm() {
   useEffect(() => {
     return () => {
       dispatch(resetBooksError())
+      dispatch(resetAutorsLoadedStatus())
     }
   }, [dispatch])
 
