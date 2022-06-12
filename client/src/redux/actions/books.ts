@@ -46,6 +46,18 @@ import {
   UPDATE_BOOK_SUCCESS,
   UpdateBookFailureAction,
   UPDATE_BOOK_FAILURE,
+  BorrowBookRequestAction,
+  BORROW_BOOK_REQUEST,
+  BorrowBookSuccessAction,
+  BORROW_BOOK_SUCCESS,
+  BorrowBookFailureAction,
+  BORROW_BOOK_FAILURE,
+  ReturnBookRequestAction,
+  RETURN_BOOK_REQUEST,
+  ReturnBookSuccessAction,
+  RETURN_BOOK_SUCCESS,
+  ReturnBookFailureAction,
+  RETURN_BOOK_FAILURE,
 } from '../../types'
 
 export function resetBooksLoadedStatus(): ResetBooksLoadedStatusAction {
@@ -196,6 +208,54 @@ export function updateBookSuccess(
 export function updateBookFailure(msg: string): UpdateBookFailureAction {
   return {
     type: UPDATE_BOOK_FAILURE,
+    payload: {
+      msg,
+    },
+  }
+}
+
+export function borrowBookRequest(): BorrowBookRequestAction {
+  return {
+    type: BORROW_BOOK_REQUEST,
+  }
+}
+
+export function borrowBookSuccess(
+  payload: BooksPropType
+): BorrowBookSuccessAction {
+  return {
+    type: BORROW_BOOK_SUCCESS,
+    payload,
+  }
+}
+
+export function borrowBookFailure(msg: string): BorrowBookFailureAction {
+  return {
+    type: BORROW_BOOK_FAILURE,
+    payload: {
+      msg,
+    },
+  }
+}
+
+export function returnBookRequest(): ReturnBookRequestAction {
+  return {
+    type: RETURN_BOOK_REQUEST,
+  }
+}
+
+export function returnBookSuccess(
+  payload: BooksPropType
+): ReturnBookSuccessAction {
+  return {
+    type: RETURN_BOOK_SUCCESS,
+    payload,
+  }
+}
+
+export function returnBookFailure(msg: string): ReturnBookFailureAction {
+  return {
+    type: RETURN_BOOK_FAILURE,
     payload: {
       msg,
     },
@@ -381,6 +441,62 @@ export function updateBook(
         return
       }
       dispatch(updateBookFailure(`Something went wrong: ${error}`))
+    }
+  }
+}
+
+export function borrowBook(bookId: string, userId: string) {
+  return async function (dispatch: ThunkDispatch<BooksState, void, Action>) {
+    dispatch(borrowBookRequest())
+    try {
+      const res = await axios.post(
+        `http://localhost:5000/api/v1/books/${bookId}/borrow`,
+        {
+          userId,
+        },
+        { withCredentials: true }
+      )
+      dispatch(borrowBookSuccess(res.data))
+    } catch (error: any) {
+      if (error.response.status === 404) {
+        dispatch(borrowBookFailure('Resourse is not found'))
+        return
+      }
+      if (error.response.status === 403) {
+        dispatch(
+          borrowBookFailure('You are not authorized to perform this action')
+        )
+        return
+      }
+      dispatch(borrowBookFailure(`Something went wrong: ${error}`))
+    }
+  }
+}
+
+export function returnBook(bookId: string, userId: string) {
+  return async function (dispatch: ThunkDispatch<BooksState, void, Action>) {
+    dispatch(returnBookRequest())
+    try {
+      const res = await axios.post(
+        `http://localhost:5000/api/v1/books/${bookId}/return`,
+        {
+          userId,
+        },
+        { withCredentials: true }
+      )
+      dispatch(returnBookSuccess(res.data))
+    } catch (error: any) {
+      if (error.response.status === 404) {
+        dispatch(returnBookFailure('Resourse is not found'))
+        return
+      }
+      if (error.response.status === 403) {
+        dispatch(
+          returnBookFailure('You are not authorized to perform this action')
+        )
+        return
+      }
+      dispatch(returnBookFailure(`Something went wrong: ${error}`))
     }
   }
 }

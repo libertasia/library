@@ -27,6 +27,14 @@ export const UPDATE_BOOK_REQUEST = 'UPDATE_BOOK_REQUEST'
 export const UPDATE_BOOK_SUCCESS = 'UPDATE_BOOK_SUCCESS'
 export const UPDATE_BOOK_FAILURE = 'UPDATE_BOOK_FAILURE'
 
+export const BORROW_BOOK_REQUEST = 'BORROW_BOOK_REQUEST'
+export const BORROW_BOOK_SUCCESS = 'BORROW_BOOK_SUCCESS'
+export const BORROW_BOOK_FAILURE = 'BORROW_BOOK_FAILURE'
+
+export const RETURN_BOOK_REQUEST = 'RETURN_BOOK_REQUEST'
+export const RETURN_BOOK_SUCCESS = 'RETURN_BOOK_SUCCESS'
+export const RETURN_BOOK_FAILURE = 'RETURN_BOOK_FAILURE'
+
 export const RESET_BOOKS_LOADED_STATUS = 'RESET_BOOKS_LOADED_STATUS'
 
 export const RESET_BOOKS_FORM_SNACKBAR = 'RESET_BOOKS_FORM_SNACKBAR'
@@ -82,6 +90,12 @@ export type BooksActions =
   | UpdateBookRequestAction
   | UpdateBookSuccessAction
   | UpdateBookFailureAction
+  | BorrowBookRequestAction
+  | BorrowBookSuccessAction
+  | BorrowBookFailureAction
+  | ReturnBookRequestAction
+  | ReturnBookSuccessAction
+  | ReturnBookFailureAction
 
 export type LoadBooksRequestAction = {
   type: typeof LOAD_BOOKS_REQUEST
@@ -179,6 +193,38 @@ export type UpdateBookFailureAction = {
   }
 }
 
+export type BorrowBookRequestAction = {
+  type: typeof BORROW_BOOK_REQUEST
+}
+
+export type BorrowBookSuccessAction = {
+  type: typeof BORROW_BOOK_SUCCESS
+  payload: BooksPropType
+}
+
+export type BorrowBookFailureAction = {
+  type: typeof BORROW_BOOK_FAILURE
+  payload: {
+    msg: string
+  }
+}
+
+export type ReturnBookRequestAction = {
+  type: typeof RETURN_BOOK_REQUEST
+}
+
+export type ReturnBookSuccessAction = {
+  type: typeof RETURN_BOOK_SUCCESS
+  payload: BooksPropType
+}
+
+export type ReturnBookFailureAction = {
+  type: typeof RETURN_BOOK_FAILURE
+  payload: {
+    msg: string
+  }
+}
+
 export type ResetBooksLoadedStatusAction = {
   type: typeof RESET_BOOKS_LOADED_STATUS
 }
@@ -198,6 +244,8 @@ export type BooksState = {
   isBookLoaded: boolean
   isBookAdded: boolean
   isBookUpdated: boolean
+  isBookBorrowed: boolean
+  isBookReturned: boolean
   isLoading: boolean
   error: string
   successCode: number

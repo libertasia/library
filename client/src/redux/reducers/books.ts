@@ -23,6 +23,12 @@ import {
   UPDATE_BOOK_REQUEST,
   UPDATE_BOOK_SUCCESS,
   UPDATE_BOOK_FAILURE,
+  BORROW_BOOK_REQUEST,
+  BORROW_BOOK_SUCCESS,
+  BORROW_BOOK_FAILURE,
+  RETURN_BOOK_REQUEST,
+  RETURN_BOOK_SUCCESS,
+  RETURN_BOOK_FAILURE,
 } from '../../types'
 
 const initialState: BooksState = {
@@ -34,6 +40,8 @@ const initialState: BooksState = {
   isBookLoaded: false,
   isBookAdded: false,
   isBookUpdated: false,
+  isBookBorrowed: false,
+  isBookReturned: false,
   isLoading: false,
   error: '',
   successCode: 0,
@@ -176,6 +184,50 @@ export function booksReducer(
       error: '',
     }
   case UPDATE_BOOK_FAILURE:
+    return {
+      ...state,
+      error: action.payload.msg,
+      isLoading: false,
+    }
+  case BORROW_BOOK_REQUEST:
+    return {
+      ...state,
+      isBookBorrowed: false,
+      isLoading: true,
+      error: '',
+    }
+  case BORROW_BOOK_SUCCESS:
+    return {
+      ...state,
+      book: action.payload,
+      isLoading: false,
+      isBookBorrowed: true,
+      isBooksLoaded: false,
+      error: '',
+    }
+  case BORROW_BOOK_FAILURE:
+    return {
+      ...state,
+      error: action.payload.msg,
+      isLoading: false,
+    }
+  case RETURN_BOOK_REQUEST:
+    return {
+      ...state,
+      isBookReturned: false,
+      isLoading: true,
+      error: '',
+    }
+  case RETURN_BOOK_SUCCESS:
+    return {
+      ...state,
+      book: action.payload,
+      isLoading: false,
+      isBookReturned: true,
+      isBooksLoaded: false,
+      error: '',
+    }
+  case RETURN_BOOK_FAILURE:
     return {
       ...state,
       error: action.payload.msg,
