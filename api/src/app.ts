@@ -31,7 +31,8 @@ app.use(cors({
       'http://localhost:3000',
       'http://localhost:5000'
     ]
-    if (whitelist.indexOf(origin) !== -1) {
+    // undefined means request comes from the same origin
+    if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
       callback(null, true)
     } else {
       callback(new Error(`Origin ${origin} not allowed by CORS policy`))

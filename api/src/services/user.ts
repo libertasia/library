@@ -13,7 +13,7 @@ const update = async (
     throw new NotFoundError(`User ${userId} not found`)
   }
 
-  return foundUser
+  return foundUser.populate('borrowedBooks')
 }
 
 const save = async (user: UserDocument): Promise<UserDocument> => {

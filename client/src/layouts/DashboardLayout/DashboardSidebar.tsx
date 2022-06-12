@@ -1,13 +1,14 @@
 import { useEffect } from 'react'
-import { Link as RouterLink, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { styled } from '@mui/material/styles'
-import { Box, Link, Drawer, Typography, Avatar } from '@mui/material'
+import { Box, Drawer } from '@mui/material'
 
 import useResponsive from '../../hooks/useResponsive'
 import Logo from '../../components/Logo'
 import Scrollbar from '../../components/Scrollbar'
 import NavSection from '../../components/NavSection'
 import navConfig from './NavConfig'
+import UserInfoPanel from '../../components/UserInfoPanel'
 
 // ----------------------------------------------------------------------
 
@@ -18,14 +19,6 @@ const RootStyle = styled('div')(({ theme }) => ({
     flexShrink: 0,
     width: DRAWER_WIDTH,
   },
-}))
-
-const AccountStyle = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(2, 2.5),
-  borderRadius: Number(theme.shape.borderRadius) * 1.5,
-  backgroundColor: theme.palette.grey[300],
 }))
 
 // ----------------------------------------------------------------------
@@ -65,21 +58,7 @@ export default function DashboardSidebar({
         <Logo />
       </Box>
 
-      <Box sx={{ mb: 5, mx: 2.5 }}>
-        <Link underline="none" component={RouterLink} to="#">
-          <AccountStyle>
-            <Avatar alt="photoURL" />
-            <Box sx={{ ml: 2 }}>
-              <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                User name here
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                User Role
-              </Typography>
-            </Box>
-          </AccountStyle>
-        </Link>
-      </Box>
+      <UserInfoPanel />
 
       <NavSection navConfig={navConfig} />
 

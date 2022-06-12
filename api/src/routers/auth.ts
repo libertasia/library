@@ -26,4 +26,14 @@ router.post(
   }
 )
 
+router.post(
+  '/logout',
+  (req, res) => {
+    console.log(`logging out`)
+    res.clearCookie('token', { httpOnly: true })
+    //res.cookie('token', 'none', { expires: new Date(Date.now() + 5 * 1000), httpOnly: true })
+    res.json({message: 'Logged out successfully'})
+  }
+)
+
 export default router

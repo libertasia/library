@@ -1,3 +1,4 @@
+export * from './user'
 export * from './books'
 export * from './categories'
 export * from './authors'

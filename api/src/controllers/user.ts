@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
 
 // import User from '../models/User'
 import UserService from '../services/user'
 import { BadRequestError } from '../helpers/apiError'
-import { User } from '../models/User'
+import { Role, User } from '../models/User'
 
 // PUT /users/:userId/update
 export const updateUser = async (
@@ -32,7 +33,13 @@ export const getCurrentUser = async (
   next: NextFunction
 ) => {
   try {
-    const user = req.user as User
+    const JWT_SECRET = process.env.JWT_SECRET as string
+    const token = req.cookies.token
+    if (!token) {
+      res.json({})
+      return
+    }
+    const user = jwt.verify(token, JWT_SECRET) as User
     const currentUser = await UserService.findOne(user.email)
     res.json(currentUser)
   } catch (error) {

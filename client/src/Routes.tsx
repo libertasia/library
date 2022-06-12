@@ -2,6 +2,7 @@ import { Navigate, useRoutes } from 'react-router-dom'
 
 import DashboardLayout from './layouts/DashboardLayout'
 import Home from './pages/Home'
+import MyBooks from './pages/MyBooks'
 import Authors from './pages/Authors'
 import AddAuthor from './pages/AddAuthor'
 import AddBook from './pages/AddBook'
@@ -18,12 +19,14 @@ export default function AppRoutes() {
       element: <DashboardLayout />,
       children: [
         { path: 'books', element: <Home /> },
+        { path: 'my-books', element: <MyBooks /> },
         { path: 'login', element: <Login /> },
         { path: 'authors', element: <Authors /> },
         { path: 'add-author', element: <AddAuthor /> },
         { path: 'add-book', element: <AddBook /> },
         { path: 'updateBook/:_id', element: <UpdateBook /> },
         { path: 'updateAuthor/:_id', element: <UpdateAuthor /> },
+        { path: 'logout', element: <Navigate to="/" replace /> },
       ],
     },
     { path: '*', element: <Page404 /> },

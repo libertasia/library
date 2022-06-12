@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { NavLink as RouterLink, matchPath, useLocation } from 'react-router-dom'
 import { alpha, useTheme, styled } from '@mui/material/styles'
 import {
@@ -11,6 +12,7 @@ import {
 } from '@mui/material'
 
 import Iconify from '../Iconify'
+import Can from '../../Can'
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +41,8 @@ const ListItemIconStyle = styled(ListItemIcon)({
 export type NavItemPropType = {
   item: {
     title: string
+    perform: string
+    performMethod: any
     path: string
     icon: string
     info: string
@@ -48,6 +52,7 @@ export type NavItemPropType = {
 }
 
 function NavItem({ item, active }: NavItemPropType) {
+  const dispatch = useDispatch()
   const theme = useTheme()
 
   const isActiveRoot = active(item.path)
@@ -99,14 +104,16 @@ function NavItem({ item, active }: NavItemPropType) {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {children.map((item: any) => {
-              const { title, path } = item
+              const { title, path, perform } = item
+              const isLink = perform.indexOf(':') === -1
               const isActiveSub = active(path)
 
               return (
                 <ListItemStyle
                   key={title}
                   component={RouterLink}
-                  to={path}
+                  to={isLink ? path : '#'}
+                  onClick={isLink ? null : () => console.log(`clicked`)}
                   sx={{
                     ...(isActiveSub && activeSubStyle),
                   }}
@@ -141,10 +148,20 @@ function NavItem({ item, active }: NavItemPropType) {
     )
   }
 
+  const { perform, performMethod } = item
+  const isLink = perform.indexOf(':') === -1
+
   return (
     <ListItemStyle
       component={RouterLink}
       to={path}
+      onClick={
+        isLink
+          ? undefined
+          : () => {
+            performMethod(dispatch)
+          }
+      }
       sx={{
         ...(isActiveRoot && activeRootStyle),
       }}
@@ -172,9 +189,16 @@ export default function NavSection({
   return (
     <Box {...other}>
       <List disablePadding sx={{ p: 1 }}>
-        {navConfig.map((item) => (
-          <NavItem key={item.title} item={item} active={match} />
-        ))}
+        {navConfig.map((item) => {
+          return (
+            <Can
+              key={item.title}
+              perform={item.perform}
+              yes={() => <NavItem item={item} active={match} />}
+              no={() => <></>}
+            ></Can>
+          )
+        })}
       </List>
     </Box>
   )

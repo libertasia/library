@@ -6,7 +6,7 @@ import verifyAuth from '../middlewares/verifyAuth'
 const router = express.Router()
 
 // Every path we define here will get /api/v1/users prefix
-router.get('/current', verifyAuth, getCurrentUser)
+router.get('/current', getCurrentUser)
 
 router.put('/:userId/update', verifyAuth, updateUser)
 
