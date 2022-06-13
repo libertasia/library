@@ -18,7 +18,7 @@ router.post(
     const token = jwt.sign({ email: user.email, role: user.role }, JWT_SECRET, {
       expiresIn: '1h',
     })
-    res.cookie('token', token, { httpOnly: true })
+    res.cookie('token', token, { httpOnly: true, sameSite: 'none', secure: true })
     res.json({
       message: 'Successfully logged in',
       token,
@@ -29,7 +29,7 @@ router.post(
 router.post(
   '/logout',
   (req, res) => {
-    res.clearCookie('token', { httpOnly: true })
+    res.clearCookie('token', { httpOnly: true, sameSite: 'none', secure: true })
     res.json({message: 'Logged out successfully'})
   }
 )
