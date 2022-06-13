@@ -29,7 +29,9 @@ app.use(cors({
     // add production address here too
     const whitelist = [
       'http://localhost:3000',
-      'http://localhost:5000'
+      'http://localhost:5000',
+      'https://integrify-library-erokhina.herokuapp.com/',
+      'https://incomparable-mermaid-5e7253.netlify.app/',
     ]
     // undefined means request comes from the same origin
     if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
