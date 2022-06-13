@@ -92,8 +92,7 @@ export default function BooksTable({
     setIsErrorVisible(false)
   }
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - books.length) : 0
+  const emptyRows = page > 0 ? Math.max(0, rowsPerPage - books.length) : 0
 
   const isBooksNotFound = books.length === 0
 
