@@ -11,6 +11,12 @@ import {
   LoadCurrentUserFailureAction,
   UserType,
   UserState,
+  UpdateUserRequestAction,
+  UPDATE_USER_REQUEST,
+  UpdateUserSuccessAction,
+  UPDATE_USER_SUCCESS,
+  UpdateUserFailureAction,
+  UPDATE_USER_FAILURE,
 } from '../../types'
 
 export function loadCurrentUserRequest(): LoadCurrentUserRequestAction {
@@ -33,6 +39,28 @@ export function loadCurrentUserFailure(
 ): LoadCurrentUserFailureAction {
   return {
     type: LOAD_CURRENT_USER_FAILURE,
+    payload: {
+      msg,
+    },
+  }
+}
+
+export function updateUserRequest(): UpdateUserRequestAction {
+  return {
+    type: UPDATE_USER_REQUEST,
+  }
+}
+
+export function updateUserSuccess(payload: UserType): UpdateUserSuccessAction {
+  return {
+    type: UPDATE_USER_SUCCESS,
+    payload,
+  }
+}
+
+export function updateUserFailure(msg: string): UpdateUserFailureAction {
+  return {
+    type: UPDATE_USER_FAILURE,
     payload: {
       msg,
     },
@@ -71,6 +99,32 @@ export function logoutUser() {
       )
     } catch (error: any) {
       console.log(error)
+    }
+  }
+}
+
+export function updateUser(userId?: string, role?: string) {
+  return async function (dispatch: ThunkDispatch<UserState, void, Action>) {
+    dispatch(updateUserRequest())
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/api/v1/users/${userId}/update`,
+        { role },
+        { withCredentials: true }
+      )
+      dispatch(updateUserSuccess(res.data))
+    } catch (error: any) {
+      if (error.response.status === 404) {
+        dispatch(updateUserFailure('Resourse is not found'))
+        return
+      }
+      if (error.response.status === 403) {
+        dispatch(
+          updateUserFailure('You are not authorized to perform this action')
+        )
+        return
+      }
+      dispatch(updateUserFailure(`Something went wrong: ${error}`))
     }
   }
 }

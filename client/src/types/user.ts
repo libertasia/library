@@ -5,6 +5,11 @@ import { BooksPropType } from './books'
 export const LOAD_CURRENT_USER_REQUEST = 'LOAD_CURRENT_USER_REQUEST'
 export const LOAD_CURRENT_USER_SUCCESS = 'LOAD_CURRENT_USER_SUCCESS'
 export const LOAD_CURRENT_USER_FAILURE = 'LOAD_CURRENT_USER_FAILURE'
+
+export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST'
+export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS'
+export const UPDATE_USER_FAILURE = 'UPDATE_USER_FAILURE'
+
 export const LOGOUT_USER = 'LOGOUT_USER'
 
 // User
@@ -28,6 +33,9 @@ export type UserActions =
   | LoadCurrentUserRequestAction
   | LoadCurrentUserSuccessAction
   | LoadCurrentUserFailureAction
+  | UpdateUserRequestAction
+  | UpdateUserSuccessAction
+  | UpdateUserFailureAction
 
 export type LoadCurrentUserRequestAction = {
   type: typeof LOAD_CURRENT_USER_REQUEST
@@ -40,6 +48,22 @@ export type LoadCurrentUserSuccessAction = {
 
 export type LoadCurrentUserFailureAction = {
   type: typeof LOAD_CURRENT_USER_FAILURE
+  payload: {
+    msg: string
+  }
+}
+
+export type UpdateUserRequestAction = {
+  type: typeof UPDATE_USER_REQUEST
+}
+
+export type UpdateUserSuccessAction = {
+  type: typeof UPDATE_USER_SUCCESS
+  payload: UserType
+}
+
+export type UpdateUserFailureAction = {
+  type: typeof UPDATE_USER_FAILURE
   payload: {
     msg: string
   }
