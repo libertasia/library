@@ -1,8 +1,9 @@
-import Iconify from '../../components/Iconify'
 import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
+
 import { UserState } from '../../types'
 import { logoutUser } from '../../redux/actions'
+import Iconify from '../../components/Iconify'
 
 // ----------------------------------------------------------------------
 

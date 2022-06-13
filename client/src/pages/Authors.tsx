@@ -10,6 +10,7 @@ import AuthorsToolbar from '../components/AuthorsToolbar'
 import { AppState, AuthorsState } from '../types'
 import { getAuthors } from '../redux/actions'
 import AuthorsTable from '../components/AuthorsTable'
+import Can from '../Can'
 
 export default function Authors() {
   const dispatch = useDispatch()
@@ -34,14 +35,20 @@ export default function Authors() {
         <Typography variant="h4" gutterBottom>
           Authors
         </Typography>
-        <Button
-          variant="contained"
-          component={RouterLink}
-          to="/dashboard/add-author"
-          startIcon={<Iconify icon="eva:plus-fill" />}
-        >
-          New Author
-        </Button>
+        <Can
+          perform={'authors:add'}
+          yes={() => (
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to="/dashboard/add-author"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+            >
+              New Author
+            </Button>
+          )}
+          no={() => <></>}
+        ></Can>
       </Stack>
 
       <AuthorsToolbar />

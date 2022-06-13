@@ -15,6 +15,7 @@ import {
   resetBookStatus,
 } from '../redux/actions'
 import { AppState, BooksState, CategoriesState } from '../types'
+import Can from '../Can'
 
 export default function Home() {
   const dispatch = useDispatch()
@@ -88,14 +89,20 @@ export default function Home() {
         <Typography variant="h4" gutterBottom>
           Books
         </Typography>
-        <Button
-          variant="contained"
-          component={RouterLink}
-          to="/dashboard/add-book"
-          startIcon={<Iconify icon="eva:plus-fill" />}
-        >
-          New Book
-        </Button>
+        <Can
+          perform={'books:add'}
+          yes={() => (
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to="/dashboard/add-book"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+            >
+              New Book
+            </Button>
+          )}
+          no={() => <></>}
+        ></Can>
       </Stack>
 
       <Card>
