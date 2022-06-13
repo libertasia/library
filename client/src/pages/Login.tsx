@@ -8,6 +8,7 @@ import { Stack, Container, Typography } from '@mui/material'
 
 import { getCurrentUser } from '../redux/actions'
 import { UserState } from '../types'
+import { API_URL } from '../config'
 
 export default function Login() {
   const dispatch = useDispatch()
@@ -21,12 +22,13 @@ export default function Login() {
     const tokenId = googleResponse.credential
 
     await axios.post(
-      '/api/v1/auth/google-login',
+      `${API_URL}/api/v1/auth/google-login`,
       {},
       {
         headers: {
           Authorization: `Bearer ${tokenId}`,
         },
+        withCredentials: true,
       }
     )
     ;(dispatch as ThunkDispatch<UserState, void, Action>)(getCurrentUser())

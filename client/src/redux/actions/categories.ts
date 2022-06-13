@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
+import { API_URL } from '../../config'
 
 import {
   LOAD_CATEGORIES_REQUEST,
@@ -47,7 +48,7 @@ export function getCategories() {
   ) {
     dispatch(loadCategoriesRequest())
     try {
-      const res = await axios.get('http://localhost:5000/api/v1/categories')
+      const res = await axios.get(`${API_URL}/api/v1/categories`)
       const categories = res.data
       dispatch(loadCategoriesSuccess(categories))
     } catch (error: any) {

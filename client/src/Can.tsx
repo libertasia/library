@@ -43,7 +43,7 @@ const Can = ({ perform, yes, no }: any) => {
 
   useEffect(() => {
     ;(dispatch as ThunkDispatch<UserState, void, Action>)(getCurrentUser())
-  }, [])
+  }, [dispatch])
 
   return check(RBAC_RULES, userRole, perform) ? yes() : no()
 }

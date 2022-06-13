@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
+import { API_URL } from '../../config'
 
 import {
   LOAD_CURRENT_USER_REQUEST,
@@ -73,10 +74,9 @@ export function getCurrentUser() {
   return async function (dispatch: ThunkDispatch<UserState, void, Action>) {
     dispatch(loadCurrentUserRequest())
     try {
-      const res = await axios.get(
-        'http://localhost:5000/api/v1/users/current',
-        { withCredentials: true }
-      )
+      const res = await axios.get(`${API_URL}/api/v1/users/current`, {
+        withCredentials: true,
+      })
       const user = res.data
       dispatch(loadCurrentUserSuccess(user))
     } catch (error: any) {
@@ -93,7 +93,7 @@ export function logoutUser() {
   return async function (dispatch: ThunkDispatch<UserState, void, Action>) {
     try {
       await axios.post(
-        'http://localhost:5000/api/v1/auth/logout',
+        `${API_URL}/api/v1/auth/logout`,
         {},
         { withCredentials: true }
       )
@@ -108,7 +108,7 @@ export function updateUser(userId?: string, role?: string) {
     dispatch(updateUserRequest())
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/v1/users/${userId}/update`,
+        `${API_URL}/api/v1/users/${userId}/update`,
         { role },
         { withCredentials: true }
       )

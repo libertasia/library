@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
+import { API_URL } from '../../config'
 
 import {
   LoadAuthorsRequestAction,
@@ -180,7 +181,7 @@ export function getAuthors() {
   return async function (dispatch: ThunkDispatch<AuthorsState, void, Action>) {
     dispatch(loadAuthorsRequest())
     try {
-      const res = await axios.get(`http://localhost:5000/api/v1/authors`)
+      const res = await axios.get(`${API_URL}/api/v1/authors`)
       dispatch(loadAuthorsSuccess(res.data))
     } catch (error: any) {
       if (error.response.status === 404) {
@@ -196,7 +197,7 @@ export function getAuthorById(_id: string) {
   return async function (dispatch: ThunkDispatch<AuthorsState, void, Action>) {
     dispatch(loadAuthorByIdRequest())
     try {
-      const res = await axios.get(`http://localhost:5000/api/v1/authors/${_id}`)
+      const res = await axios.get(`${API_URL}/api/v1/authors/${_id}`)
       dispatch(loadAuthorByIdSuccess(res.data))
     } catch (error: any) {
       if (error.response.status === 404) {
@@ -218,7 +219,7 @@ export function addNewAuthor(
     dispatch(addAuthorRequest())
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/v1/authors/create`,
+        `${API_URL}/api/v1/authors/create`,
         { firstName, lastName, birthYear, biography },
         { withCredentials: true }
       )
@@ -244,7 +245,7 @@ export function deleteAuthor(_id: string) {
     dispatch(deleteAuthorRequest())
     try {
       const res = await axios.delete(
-        `http://localhost:5000/api/v1/authors/${_id}/delete`,
+        `${API_URL}/api/v1/authors/${_id}/delete`,
         { withCredentials: true }
       )
       dispatch(deleteAuthorSuccess(res.status))
@@ -279,7 +280,7 @@ export function updateAuthor(
     dispatch(updateAuthorRequest())
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/v1/authors/${_id}/update`,
+        `${API_URL}/api/v1/authors/${_id}/update`,
         { firstName, lastName, birthYear, biography },
         { withCredentials: true }
       )

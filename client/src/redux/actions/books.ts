@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
+import { API_URL } from '../../config'
 
 import {
   LOAD_BOOKS_REQUEST,
@@ -286,7 +287,7 @@ export function getBooksPaginated(
       const statusQuery = statusFilters?.join()
       const categoryQuery = categoryFilters?.join()
       const res = await axios.get(
-        `http://localhost:5000/api/v1/books/search?page=${page}&perPage=${perPage}&${searchType}=${searchValue}&status=${statusQuery}&category=${categoryQuery}`
+        `${API_URL}/api/v1/books/search?page=${page}&perPage=${perPage}&${searchType}=${searchValue}&status=${statusQuery}&category=${categoryQuery}`
       )
       const responseData = res.data
       dispatch(loadBooksSuccess(responseData.books))
@@ -305,7 +306,7 @@ export function getBooksCount() {
   return async function (dispatch: ThunkDispatch<BooksState, void, Action>) {
     dispatch(loadBooksCountRequest())
     try {
-      const res = await axios.get('http://localhost:5000/api/v1/books/count')
+      const res = await axios.get(`${API_URL}/api/v1/books/count`)
       const booksCount: number = res.data
       dispatch(loadBooksCountSuccess(booksCount))
     } catch (error: any) {
@@ -322,7 +323,7 @@ export function getBookById(_id: string) {
   return async function (dispatch: ThunkDispatch<BooksState, void, Action>) {
     dispatch(loadBookByIdRequest())
     try {
-      const res = await axios.get(`http://localhost:5000/api/v1/books/${_id}`)
+      const res = await axios.get(`${API_URL}/api/v1/books/${_id}`)
       const responseData = res.data
       dispatch(loadBookByIdSuccess(responseData.books))
     } catch (error: any) {
@@ -349,7 +350,7 @@ export function addNewBook(
     dispatch(addBookRequest())
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/v1/books/create`,
+        `${API_URL}/api/v1/books/create`,
         {
           isbn,
           title,
@@ -383,10 +384,9 @@ export function deleteBook(_id: string) {
   return async function (dispatch: ThunkDispatch<BooksState, void, Action>) {
     dispatch(deleteBookRequest())
     try {
-      const res = await axios.delete(
-        `http://localhost:5000/api/v1/books/${_id}/delete`,
-        { withCredentials: true }
-      )
+      const res = await axios.delete(`${API_URL}/api/v1/books/${_id}/delete`, {
+        withCredentials: true,
+      })
       dispatch(deleteBookSuccess(res.status))
     } catch (error: any) {
       if (error.response.status === 404) {
@@ -423,7 +423,7 @@ export function updateBook(
     dispatch(updateBookRequest())
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/v1/books/${_id}/update`,
+        `${API_URL}/api/v1/books/${_id}/update`,
         {
           isbn,
           title,
@@ -458,7 +458,7 @@ export function borrowBook(bookId: string, userId: string) {
     dispatch(borrowBookRequest())
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/v1/books/${bookId}/borrow`,
+        `${API_URL}/api/v1/books/${bookId}/borrow`,
         {
           userId,
         },
@@ -486,7 +486,7 @@ export function returnBook(bookId: string, userId: string) {
     dispatch(returnBookRequest())
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/v1/books/${bookId}/return`,
+        `${API_URL}/api/v1/books/${bookId}/return`,
         {
           userId,
         },
