@@ -7,7 +7,7 @@ import User, { UserDocument } from '../models/User'
 import Category, { CategoryDocument } from '../models/Category'
 import { BadRequestError } from '../helpers/apiError'
 
-const mockData = require('../mockData.json')
+import mockData from '../mockData'
 
 async function authorCreate(
   firstName: string,
@@ -41,7 +41,7 @@ async function categoryCreate(title: string) {
 }
 
 async function bookCreate(
-  isbn: string,
+  isbn: number,
   title: string,
   category: Schema.Types.ObjectId,
   description: string,

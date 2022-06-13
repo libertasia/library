@@ -1,4 +1,4 @@
-{
+const mockData = {
   "authors": [
     {
       "firstName": "Dodson",
@@ -8313,3 +8313,4 @@
     "Science Fiction"
   ]
 }
+export default mockData
