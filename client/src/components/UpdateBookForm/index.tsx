@@ -292,7 +292,7 @@ export default function UpdateBookForm({ book }: BookPropType) {
             variant="contained"
             loading={isSubmitting}
           >
-            Add book
+            Update book
           </LoadingButton>
         </Stack>
       </Form>

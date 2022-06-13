@@ -39,6 +39,8 @@ export const RESET_BOOKS_LOADED_STATUS = 'RESET_BOOKS_LOADED_STATUS'
 
 export const RESET_BOOKS_FORM_SNACKBAR = 'RESET_BOOKS_FORM_SNACKBAR'
 
+export const RESET_BOOK_STATUS = 'RESET_BOOK_STATUS'
+
 // Books
 
 export type StatusType = 'AVAILABLE' | 'BORROWED'
@@ -96,6 +98,7 @@ export type BooksActions =
   | ReturnBookRequestAction
   | ReturnBookSuccessAction
   | ReturnBookFailureAction
+  | ResetBookStatusAction
 
 export type LoadBooksRequestAction = {
   type: typeof LOAD_BOOKS_REQUEST
@@ -231,6 +234,10 @@ export type ResetBooksLoadedStatusAction = {
 
 export type ResetBooksFormSnackbarAction = {
   type: typeof RESET_BOOKS_FORM_SNACKBAR
+}
+
+export type ResetBookStatusAction = {
+  type: typeof RESET_BOOK_STATUS
 }
 
 // State

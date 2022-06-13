@@ -58,6 +58,8 @@ import {
   RETURN_BOOK_SUCCESS,
   ReturnBookFailureAction,
   RETURN_BOOK_FAILURE,
+  ResetBookStatusAction,
+  RESET_BOOK_STATUS,
 } from '../../types'
 
 export function resetBooksLoadedStatus(): ResetBooksLoadedStatusAction {
@@ -259,6 +261,12 @@ export function returnBookFailure(msg: string): ReturnBookFailureAction {
     payload: {
       msg,
     },
+  }
+}
+
+export function resetBookStatus(): ResetBookStatusAction {
+  return {
+    type: RESET_BOOK_STATUS,
   }
 }
 

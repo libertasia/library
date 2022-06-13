@@ -1,4 +1,4 @@
-import { BooksPropType } from './books'
+import { BookType } from './books'
 
 // Action types
 
@@ -20,7 +20,7 @@ export type UserType = {
   lastName: string
   email: string
   userName: string
-  borrowedBooks: BooksPropType
+  borrowedBooks: BookType[]
   role: string
 }
 export type UserPropType = {
@@ -77,6 +77,7 @@ export type LogoutUserAction = {
 
 export type UserState = {
   user: UserType | null
+  isUserLoaded: boolean
   isLoading: boolean
   error: string
 }

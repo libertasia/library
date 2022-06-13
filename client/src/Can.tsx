@@ -10,10 +10,6 @@ import { UserState } from './types'
 import { getCurrentUser } from './redux/actions'
 
 const check = (rules: any, role: any, action: any) => {
-  if (role === 'ADMIN') {
-    return true
-  }
-
   const permissions = rules[role]
   if (!permissions) {
     // role is not present in the rules

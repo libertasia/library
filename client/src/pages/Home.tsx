@@ -12,6 +12,7 @@ import {
   getBooksCount,
   getBooksPaginated,
   getCategories,
+  resetBookStatus,
 } from '../redux/actions'
 import { AppState, BooksState, CategoriesState } from '../types'
 
@@ -71,6 +72,10 @@ export default function Home() {
       ;(dispatch as ThunkDispatch<BooksState, void, Action>)(getBooksCount())
     }
   }, [dispatch, isBooksCountLoaded])
+
+  useEffect(() => {
+    ;(dispatch as ThunkDispatch<BooksState, void, Action>)(resetBookStatus())
+  }, [dispatch])
 
   return (
     <Container>

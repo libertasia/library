@@ -29,6 +29,7 @@ import {
   RETURN_BOOK_REQUEST,
   RETURN_BOOK_SUCCESS,
   RETURN_BOOK_FAILURE,
+  RESET_BOOK_STATUS,
 } from '../../types'
 
 const initialState: BooksState = {
@@ -193,6 +194,7 @@ export function booksReducer(
     return {
       ...state,
       isBookBorrowed: false,
+      isBookReturned: false,
       isLoading: true,
       error: '',
     }
@@ -209,12 +211,14 @@ export function booksReducer(
     return {
       ...state,
       error: action.payload.msg,
+      isBookBorrowed: false,
       isLoading: false,
     }
   case RETURN_BOOK_REQUEST:
     return {
       ...state,
       isBookReturned: false,
+      isBookBorrowed: false,
       isLoading: true,
       error: '',
     }
@@ -231,7 +235,14 @@ export function booksReducer(
     return {
       ...state,
       error: action.payload.msg,
+      isBookReturned: false,
       isLoading: false,
+    }
+  case RESET_BOOK_STATUS:
+    return {
+      ...state,
+      isBookBorrowed: false,
+      isBookReturned: false,
     }
   default:
     return state
