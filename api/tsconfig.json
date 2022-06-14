@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "skipLibCheck": true,
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
@@ -15,5 +16,6 @@
       "*": ["node_modules/*", "src/types/*"]
     }
   },
-  "include": ["src/**/*", "**/*.test.ts"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
