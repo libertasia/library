@@ -1,9 +1,10 @@
 import Author, { AuthorDocument } from '../models/Author'
+import Book from '../models/Book'
 import { ExpectationFailedError, NotFoundError } from '../helpers/apiError'
 
 const findAll = async (): Promise<AuthorDocument[]> => {
   return Author.find()
-  .populate('books', 'title publishedYear')
+  .populate('books', 'title publishedYear', Book)
   .sort({ firstName: 1 })
 }
 
