@@ -6,6 +6,7 @@ import {
   SetSearchTypeAction,
   SetSearchValueAction,
   SetStatusFiltersAction,
+  RedirectToUrlAction,
   SET_AUTHORS_FILTER_VALUE,
   SET_CATEGORY_FILTERS,
   SET_PAGE,
@@ -13,7 +14,15 @@ import {
   SET_SEARCH_TYPE,
   SET_SEARCH_VALUE,
   SET_STATUS_FILTERS,
+  REDIRECT_TO_URL,
 } from '../../types'
+
+export function redirectToUrl(url: string): RedirectToUrlAction {
+  return {
+    type: REDIRECT_TO_URL,
+    payload: url,
+  }
+}
 
 export function setSearchType(searchType: string): SetSearchTypeAction {
   return {

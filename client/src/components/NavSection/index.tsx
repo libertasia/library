@@ -154,7 +154,7 @@ function NavItem({ item, active }: NavItemPropType) {
   return (
     <ListItemStyle
       component={RouterLink}
-      to={path}
+      to={isLink ? path : '#'}
       onClick={
         isLink
           ? undefined

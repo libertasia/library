@@ -7,13 +7,14 @@ const update = async (
 ): Promise<UserDocument | null> => {
   const foundUser = await User.findByIdAndUpdate(userId, update, {
     new: true,
-  })
+  }).populate('borrowedBooks')
 
   if (!foundUser) {
     throw new NotFoundError(`User ${userId} not found`)
   }
 
-  return foundUser.populate('borrowedBooks')
+  console.log(foundUser)
+  return foundUser
 }
 
 const save = async (user: UserDocument): Promise<UserDocument> => {

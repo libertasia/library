@@ -1,11 +1,12 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { unstable_HistoryRouter as Router } from 'react-router-dom'
 
 import App from './App'
 import store from './redux/store'
 import reportWebVitals from './reportWebVitals'
+import browserHistory from './browser-history'
 
 const container = document.getElementById('root')
 
@@ -13,7 +14,7 @@ const root = createRoot(container!)
 
 root.render(
   <Provider store={store}>
-    <Router>
+    <Router history={browserHistory}>
       <App />
     </Router>
   </Provider>

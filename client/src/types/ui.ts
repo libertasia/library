@@ -9,6 +9,8 @@ export const SET_AUTHORS_FILTER_VALUE = 'SET_AUTHORS_FILTER_VALUE'
 export const SET_PAGE = 'SET_PAGE'
 export const SET_ROWS_PER_PAGE = 'SET_ROWS_PER_PAGE'
 
+export const REDIRECT_TO_URL = 'REDIRECT_TO_URL'
+
 // Actions
 
 export type UiActions =
@@ -19,6 +21,7 @@ export type UiActions =
   | SetPageAction
   | SetRowsPerPageAction
   | SetAuthorsFilterValueAction
+  | RedirectToUrlAction
 
 export type SetSearchTypeAction = {
   type: typeof SET_SEARCH_TYPE
@@ -67,6 +70,11 @@ export type SetAuthorsFilterValueAction = {
   payload: {
     authorsFilterValue: string
   }
+}
+
+export type RedirectToUrlAction = {
+  type: typeof REDIRECT_TO_URL
+  payload: string
 }
 
 // State

@@ -70,6 +70,7 @@ export default function MyBooksTable() {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((book: BookType) => {
                 const { _id, title, status, borrowDate, returnDate } = book
+                console.log(userBooks)
 
                 return (
                   <TableRow hover key={_id} tabIndex={-1}>

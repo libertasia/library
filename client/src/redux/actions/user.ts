@@ -19,6 +19,7 @@ import {
   UpdateUserFailureAction,
   UPDATE_USER_FAILURE,
 } from '../../types'
+import { redirectToUrl } from './ui'
 
 export function loadCurrentUserRequest(): LoadCurrentUserRequestAction {
   return {
@@ -97,6 +98,7 @@ export function logoutUser() {
         {},
         { withCredentials: true }
       )
+      dispatch(redirectToUrl('/dashboard/books'))
     } catch (error: any) {
       console.log(error)
     }
