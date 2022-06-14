@@ -10,6 +10,7 @@ import UpdateBook from './pages/UpdateBook'
 import UpdateAuthor from './pages/UpdateAuthor'
 import Login from './pages/Login'
 import Page404 from './pages/Page404'
+import Can from './Can'
 
 export default function AppRoutes() {
   return useRoutes([
@@ -22,10 +23,46 @@ export default function AppRoutes() {
         { path: 'my-books', element: <MyBooks /> },
         { path: 'login', element: <Login /> },
         { path: 'authors', element: <Authors /> },
-        { path: 'add-author', element: <AddAuthor /> },
-        { path: 'add-book', element: <AddBook /> },
-        { path: 'updateBook/:_id', element: <UpdateBook /> },
-        { path: 'updateAuthor/:_id', element: <UpdateAuthor /> },
+        {
+          path: 'add-author',
+          element: (
+            <Can
+              perform="add_author"
+              yes={() => <AddAuthor />}
+              no={() => <Navigate to="/dashboard/books" replace />}
+            />
+          ),
+        },
+        {
+          path: 'add-book',
+          element: (
+            <Can
+              perform="add_book"
+              yes={() => <AddBook />}
+              no={() => <Navigate to="/dashboard/books" replace />}
+            />
+          ),
+        },
+        {
+          path: 'updateBook/:_id',
+          element: (
+            <Can
+              perform="update_book"
+              yes={() => <UpdateBook />}
+              no={() => <Navigate to="/dashboard/books" replace />}
+            />
+          ),
+        },
+        {
+          path: 'updateAuthor/:_id',
+          element: (
+            <Can
+              perform="update_author"
+              yes={() => <UpdateAuthor />}
+              no={() => <Navigate to="/dashboard/books" replace />}
+            />
+          ),
+        },
         { path: 'logout', element: <Navigate to="/" replace /> },
       ],
     },
