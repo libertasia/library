@@ -36,6 +36,7 @@ export type UserActions =
   | UpdateUserRequestAction
   | UpdateUserSuccessAction
   | UpdateUserFailureAction
+  | LogoutUserAction
 
 export type LoadCurrentUserRequestAction = {
   type: typeof LOAD_CURRENT_USER_REQUEST

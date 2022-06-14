@@ -4,6 +4,7 @@ import {
   LOAD_CURRENT_USER_FAILURE,
   LOAD_CURRENT_USER_REQUEST,
   LOAD_CURRENT_USER_SUCCESS,
+  LOGOUT_USER,
   RETURN_BOOK_SUCCESS,
   UPDATE_USER_FAILURE,
   UPDATE_USER_REQUEST,
@@ -70,6 +71,11 @@ export function userReducer(
     return {
       ...state,
       isUserLoaded: false,
+    }
+  case LOGOUT_USER:
+    return {
+      ...state,
+      error: '',
     }
   default:
     return state

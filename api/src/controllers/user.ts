@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
+import { JWT_SECRET } from '../util/secrets'
+
 // import User from '../models/User'
 import UserService from '../services/user'
 import { BadRequestError } from '../helpers/apiError'
@@ -16,6 +18,11 @@ export const updateUser = async (
     const update = req.body
     const userId = req.params.userId
     const updatedUser = await UserService.update(userId, update)
+
+    const token = jwt.sign({ email: updatedUser?.email, role: updatedUser?.role }, JWT_SECRET, {
+      expiresIn: '1h',
+    })
+    res.cookie('token', token, { httpOnly: true, sameSite: 'none', secure: true })
     res.json(updatedUser)
   } catch (error) {
     if (error instanceof Error && error.name == 'ValidationError') {

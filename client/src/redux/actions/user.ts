@@ -98,7 +98,7 @@ export function logoutUser() {
         {},
         { withCredentials: true }
       )
-      dispatch(redirectToUrl('/dashboard/books'))
+      dispatch(redirectToUrl('/'))
     } catch (error: any) {
       console.log(error)
     }
