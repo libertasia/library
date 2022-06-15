@@ -1,31 +1,56 @@
-# Fullstack-Typescript-Project
+# Fullstack-Typescript-Project "Library"
 
-First choose the project topic. The topics and assignment can be found in Fullstack assignment presentation on the shared drive.
+This project has been completed as part of Integrify FullStack program.
+
+Latest version is deployed at https://incomparable-mermaid-5e7253.netlify.app/.
+
+## Project description
+
+Unregistered user can see the list of books on the Home page, move between pages and change the number of books per page. When the user changes the page, a request is sent to the backend with the page number and number of items per page and the backend returns data for this specific page only, which speeds things up a bit.
+The unregistered user can also search and filter the list of books by a number of parameters, and this search and filtering is also done on the backend side.
+There is a similar page with a list of authors. Where user can see all the books written by a given author and also their biography.
+User can sign in and logout using their Google account. Login information is shared between frontend and backend using cookies.
+After logging in user with admin privileges can do much more: borrow a book from the library, return the book, add a new author or a new book, delete and edit book or author.
 
 ## Prerequisites
 
-1. Install mongodb or use MongoDB Atlas (cloud version)
-2. Install nodejs (if you don't have it already)
+1. Install mongodb or use MongoDB Atlas. 
+2. Install nodejs v16.15.0 (if you don't have it already)
 
 ## Setting Up for `API folder`
 
 1. Create a `.env` file in the root directory and copy the content from `.env.example`
-
 2. Make sure mongodb is running (if you are using local MongoDB)
-3. Install dependencies: `yarn`
-4. Use this command for development mode: `yarn run start:dev`
+3. Install dependencies: `npm i`
+4. Use this command for development mode: `npm run start:dev`
 5. If you need to customize your env, take a look at `secrets.ts` file
 
-## Requirements
+## Setting Up for `Client folder`
 
-Below are the steps that you need to finish in order to finish this module
+1. Navigate to the client folder and install dependencies by running: `$ npm install`
+2. Start the app by running: `$ npm start`
 
-1. Explore the code base of the api folder, start with `server.ts` and `app.ts`
-2. Client folder is for the react frontend. Start with `api` first before moving on to `client`
-3. Create all the mongoose schema for your ERD
-4. Create CRUD endpoints for all the schema
-5. Separate the routers and controller, controller goes into the controller folders. Controllers only handles request and response, and will call service to process business logics.
-6. Create more controller for your app if needed. Eg: borrow books, add product to order
-7. For business logic like saving data to database, filtering, searching or updating, these are services and goes into services folder
-8. Add authentication middleware using passport, google and jwt strategy
-9. Add tests for your controllers and services. Remember to create the jwt token for your tests, because if your controller is protected, then the test should send the token also
+## Used technologies
+
+### Frontend
+* TypeScript
+* Material UI
+* Formik
+* React.js, React.js hooks
+* React-router
+* Redux
+* Redux-thunk
+* Axios
+* Prettier
+* ESLint
+* Husky & lint-staged
+
+### Backend
+* express.js
+* MongoDB Atlas
+* passport, google and jwt strategy
+* Jest
+* supertest
+* Prettier
+* ESLint
+* Husky & lint-staged
